@@ -10,9 +10,17 @@ const { d1, r2 } = hostingConfig;
 
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === 'seatbelt';
-const localVars: Record<string, string> = { INSPIRATION_MODE: process.env.INSPIRATION_MODE || 'test', PUBLIC_DEMO: process.env.PUBLIC_DEMO || '1' };
-if (process.env.OPENAI_API_KEY) localVars.OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-if (process.env.LOCAL_RETAILER_RENDER_TOKEN) localVars.LOCAL_RETAILER_RENDER_TOKEN = process.env.LOCAL_RETAILER_RENDER_TOKEN;
+const publicDemo = (process.env.PUBLIC_DEMO || '1') === '1';
+const localVars: Record<string, string> = {
+  INSPIRATION_MODE: publicDemo ? 'test' : process.env.INSPIRATION_MODE || 'test',
+  PUBLIC_DEMO: publicDemo ? '1' : '0',
+};
+// A demo run must not inherit a participant's live learning mode or keys.
+if (!publicDemo) {
+  for (const name of ['OPENAI_API_KEY', 'LOCAL_RETAILER_RENDER_TOKEN', 'ANGIE_ACCESS_CODE', 'DEMO_ADMIN_ACCESS_CODE']) {
+    if (process.env[name]) localVars[name] = process.env[name]!;
+  }
+}
 
 const localBindingConfig = {
   main: 'vinext/server/app-router-entry',

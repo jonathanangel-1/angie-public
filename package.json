@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=24.0.0"
   },
   "scripts": {
     "dev": "vinext dev",
@@ -20,7 +20,8 @@
     "catalog:update": "node scripts/update-local-catalog.mjs",
     "eval:taste": "node scripts/eval-taste.mjs",
     "demo": "PUBLIC_DEMO=1 vinext dev --port 4175",
-    "test:public": "node scripts/inspiration-flow-check.mjs"
+    "test:public": "node scripts/inspiration-flow-check.mjs",
+    "test:demo": "node scripts/public-demo-check.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

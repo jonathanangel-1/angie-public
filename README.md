@@ -1,10 +1,20 @@
 # Angie
 
+[![Public checks](https://github.com/jonathanangel-1/angie-public/actions/workflows/public-checks.yml/badge.svg)](https://github.com/jonathanangel-1/angie-public/actions/workflows/public-checks.yml)
+
+[Engineering guide](docs/ENGINEERING.md) · [Reviewer walkthrough and tests](docs/REVIEW.md) · [Public data boundary](docs/PUBLIC_DATA.md)
+
 A personal styling application that turns an inspiration or written request into product recommendations, then learns from confirmed reactions, tried sizes, and keep/return outcomes.
 
 **Public edition:** the participant, measurements, purchase history, product catalog, and illustrations are fictional. The original recommendation and learning architecture remains. [Data boundary](docs/PUBLIC_DATA.md).
 
 ![Fictional public demo](docs/images/demo.png)
+
+## The engineering focus
+
+Resembling an inspiration, matching a person's taste, and fitting their body are different problems. Angie combines structured garment intent, verified product candidates, constrained ranking, targeted search recovery, and explicit feedback. A return does not automatically mean dislike; a like does not prove fit.
+
+The [engineering guide](docs/ENGINEERING.md) traces those decisions into the source. The [review protocol](docs/REVIEW.md) walks through a recommendation, its saved feedback, and the evidence behind the tests.
 
 ## Run without API keys
 
@@ -43,7 +53,10 @@ Demo mode defaults to an isolated test profile. Feedback persists in that local 
 npm run test:public
 npx --no-install tsc --noEmit
 npm run build
+npm run test:demo
 ```
+
+Stop the interactive demo before `test:demo`; it starts its own server. The HTTP check runs actual access, generation, feedback, retry, fit-outcome, and saved-history routes against local D1, and verifies that the personal baseline is unchanged.
 
 The offline regression checks cover evidence handling, ranking, source checks, role boundaries, isolation, feedback, saved looks, tried-size outcomes, retries, and migrations.
 
