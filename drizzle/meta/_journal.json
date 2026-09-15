@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1787660567050,
+      "tag": "0000_overrated_rafael_vega",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1787669123036,
+      "tag": "0001_nappy_gambit",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1788102395410,
+      "tag": "0002_skinny_machine_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1788110858077,
+      "tag": "0003_chubby_zemo",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1788113070213,
+      "tag": "0004_calm_gorilla_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1788168905733,
+      "tag": "0005_isolate_feedback_history",
+      "breakpoints": true
+    }
+  ]
+}

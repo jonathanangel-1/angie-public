@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `inspiration_feedback_once_idx` ON `inspiration_feedback` (`session_id`,`recommendation_id`,`edit_id`);

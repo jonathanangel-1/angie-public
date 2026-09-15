@@ -1,0 +1,493 @@
+{
+  "version": "synthetic-v1",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "source": [
+    "Generated fictional records"
+  ],
+  "retailer": "Demo Atelier",
+  "productCount": 13,
+  "products": [
+    {
+      "id": "demo-product-01",
+      "retailerProductId": "demo-product-01",
+      "masterProductId": "demo-product-01",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-01",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Cotton crew tee",
+      "category": "top",
+      "subtype": "tee",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-01.svg",
+      "imageUrl": "/demo/demo-product-01.svg",
+      "price": {
+        "amount": 42,
+        "currency": "USD"
+      },
+      "color": "White",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "controlled",
+        "length": "regular",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "white",
+        "neckline": "crew",
+        "sleeve": "short",
+        "composition": "100% cotton",
+        "publicDescription": "Fictional cotton crew tee used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-product-02",
+      "retailerProductId": "demo-product-02",
+      "masterProductId": "demo-product-02",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-02",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Cotton poplin shirt",
+      "category": "top",
+      "subtype": "shirt",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-02.svg",
+      "imageUrl": "/demo/demo-product-02.svg",
+      "price": {
+        "amount": 54,
+        "currency": "USD"
+      },
+      "color": "Navy",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "straight",
+        "length": "regular",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "navy",
+        "neckline": "crew",
+        "sleeve": "short",
+        "composition": "100% cotton",
+        "publicDescription": "Fictional cotton poplin shirt used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-product-03",
+      "retailerProductId": "demo-product-03",
+      "masterProductId": "demo-product-03",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-03",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Fine cotton knit",
+      "category": "top",
+      "subtype": "knit",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-03.svg",
+      "imageUrl": "/demo/demo-product-03.svg",
+      "price": {
+        "amount": 66,
+        "currency": "USD"
+      },
+      "color": "Grey",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "fitted",
+        "length": "regular",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "grey",
+        "neckline": "crew",
+        "sleeve": "short",
+        "composition": "100% cotton",
+        "publicDescription": "Fictional fine cotton knit used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-product-04",
+      "retailerProductId": "demo-product-04",
+      "masterProductId": "demo-product-04",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-04",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Straight tailored trousers",
+      "category": "bottom",
+      "subtype": "trouser",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-04.svg",
+      "imageUrl": "/demo/demo-product-04.svg",
+      "price": {
+        "amount": 78,
+        "currency": "USD"
+      },
+      "color": "Navy",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "straight",
+        "length": "full",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "navy",
+        "neckline": "unknown",
+        "sleeve": "unknown",
+        "composition": "100% cotton",
+        "publicDescription": "Fictional straight tailored trousers used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-product-05",
+      "retailerProductId": "demo-product-05",
+      "masterProductId": "demo-product-05",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-05",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Controlled linen trousers",
+      "category": "bottom",
+      "subtype": "trouser",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-05.svg",
+      "imageUrl": "/demo/demo-product-05.svg",
+      "price": {
+        "amount": 90,
+        "currency": "USD"
+      },
+      "color": "Black",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "controlled",
+        "length": "ankle",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "black",
+        "neckline": "unknown",
+        "sleeve": "unknown",
+        "composition": "100% cotton",
+        "publicDescription": "Fictional controlled linen trousers used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-product-06",
+      "retailerProductId": "demo-product-06",
+      "masterProductId": "demo-product-06",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-06",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Straight denim jeans",
+      "category": "bottom",
+      "subtype": "jean",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-06.svg",
+      "imageUrl": "/demo/demo-product-06.svg",
+      "price": {
+        "amount": 102,
+        "currency": "USD"
+      },
+      "color": "Blue",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "straight",
+        "length": "full",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "blue",
+        "neckline": "unknown",
+        "sleeve": "unknown",
+        "composition": "100% cotton",
+        "publicDescription": "Fictional straight denim jeans used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-product-07",
+      "retailerProductId": "demo-product-07",
+      "masterProductId": "demo-product-07",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-07",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Simple column dress",
+      "category": "dress",
+      "subtype": "dress",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-07.svg",
+      "imageUrl": "/demo/demo-product-07.svg",
+      "price": {
+        "amount": 114,
+        "currency": "USD"
+      },
+      "color": "Black",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "fitted",
+        "length": "midi",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "black",
+        "neckline": "unknown",
+        "sleeve": "unknown",
+        "composition": "Synthetic example specification",
+        "publicDescription": "Fictional simple column dress used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-product-08",
+      "retailerProductId": "demo-product-08",
+      "masterProductId": "demo-product-08",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-08",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Leather low heel",
+      "category": "shoes",
+      "subtype": "heel",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-08.svg",
+      "imageUrl": "/demo/demo-product-08.svg",
+      "price": {
+        "amount": 126,
+        "currency": "USD"
+      },
+      "color": "Black",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "controlled",
+        "length": "regular",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "black",
+        "neckline": "unknown",
+        "sleeve": "unknown",
+        "composition": "Synthetic example specification",
+        "publicDescription": "Fictional leather low heel used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-product-09",
+      "retailerProductId": "demo-product-09",
+      "masterProductId": "demo-product-09",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-09",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Structured wool jacket",
+      "category": "layer",
+      "subtype": "jacket",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-09.svg",
+      "imageUrl": "/demo/demo-product-09.svg",
+      "price": {
+        "amount": 138,
+        "currency": "USD"
+      },
+      "color": "Grey",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "structured",
+        "length": "regular",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "grey",
+        "neckline": "unknown",
+        "sleeve": "unknown",
+        "composition": "Synthetic example specification",
+        "publicDescription": "Fictional structured wool jacket used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-product-rejected",
+      "retailerProductId": "demo-product-rejected",
+      "masterProductId": "demo-product-rejected",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-product-rejected",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Fictional barrel trousers",
+      "category": "bottom",
+      "subtype": "trouser",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-product-rejected.svg",
+      "imageUrl": "/demo/demo-product-04.svg",
+      "price": {
+        "amount": 78,
+        "currency": "USD"
+      },
+      "color": "Navy",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "barrel",
+        "length": "full",
+        "rise": "mid",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "navy",
+        "neckline": "unknown",
+        "sleeve": "unknown",
+        "composition": "100% cotton",
+        "publicDescription": "Fictional straight tailored trousers used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-extra-cami",
+      "retailerProductId": "demo-extra-cami",
+      "masterProductId": "demo-extra-cami",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-extra-cami",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Fictional black cami",
+      "category": "top",
+      "subtype": "cami",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-extra-cami.svg",
+      "imageUrl": "/demo/demo-product-02.svg",
+      "price": {
+        "amount": 54,
+        "currency": "USD"
+      },
+      "color": "Black",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "fitted",
+        "length": "waist",
+        "rise": "high",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "black",
+        "neckline": "square",
+        "sleeve": "sleeveless",
+        "composition": "100% cotton",
+        "publicDescription": "Fictional cotton poplin shirt used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-extra-heel",
+      "retailerProductId": "demo-extra-heel",
+      "masterProductId": "demo-extra-heel",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-extra-heel",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Fictional black heel",
+      "category": "shoes",
+      "subtype": "heel",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-extra-heel.svg",
+      "imageUrl": "/demo/demo-product-08.svg",
+      "price": {
+        "amount": 126,
+        "currency": "USD"
+      },
+      "color": "Black",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "elegant",
+        "length": "small heel",
+        "rise": "high",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "black",
+        "neckline": "unknown",
+        "sleeve": "unknown",
+        "composition": "Synthetic example specification",
+        "publicDescription": "Fictional leather low heel used to demonstrate ranking and learning."
+      }
+    },
+    {
+      "id": "demo-extra-trouser",
+      "retailerProductId": "demo-extra-trouser",
+      "masterProductId": "demo-extra-trouser",
+      "retailer": "Demo Atelier",
+      "canonicalUrl": "https://shop.example.com/products/demo-extra-trouser",
+      "verifiedAt": "2026-01-01T00:00:00Z",
+      "status": "active",
+      "name": "Fictional black trouser",
+      "category": "bottom",
+      "subtype": "trouser",
+      "sourcePage": "Synthetic catalog",
+      "imageSourceUrl": "https://images.example.com/demo-extra-trouser.svg",
+      "imageUrl": "/demo/demo-product-04.svg",
+      "price": {
+        "amount": 78,
+        "currency": "USD"
+      },
+      "color": "Black",
+      "availableSizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "attributes": {
+        "silhouette": "straight",
+        "length": "full",
+        "rise": "high",
+        "formality": 3,
+        "details": [],
+        "colorFamily": "black",
+        "neckline": "unknown",
+        "sleeve": "unknown",
+        "composition": "100% cotton",
+        "publicDescription": "Fictional straight tailored trousers used to demonstrate ranking and learning."
+      }
+    }
+  ],
+  "diagnostics": []
+}

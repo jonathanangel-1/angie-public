@@ -1,0 +1,12 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { collectAritzia } from './catalog-sources/aritzia.mjs';
+const file = new URL('../data/verified-catalog.json', import.meta.url);
+const catalog = JSON.parse(await readFile(file, 'utf8'));
+const result = await collectAritzia({ imageDir: new URL('../public/catalog', import.meta.url).pathname, verifiedAt: new Date().toISOString(), limit: 75, minimum: 10, minimumImages: 5, sources: [{ url: 'https://www.aritzia.com/intl/en/clothing/tshirts', category: 'top' }] });
+const merged = new Map(catalog.products.map((p) => [p.canonicalUrl, p]));
+for (const product of result.products) merged.set(product.canonicalUrl, product);
+catalog.products = [...merged.values()]; catalog.productCount = catalog.products.length;
+catalog.diagnostics.basicTopsExpansion = result.diagnostics;
+await writeFile(file, JSON.stringify(catalog, null, 2) + '\n');
+await import('./normalize-local-catalog.mjs');
+console.log(JSON.stringify({ addedOrUpdated: result.products.length, total: catalog.productCount }));
