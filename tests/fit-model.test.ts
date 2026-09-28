@@ -39,6 +39,8 @@ test('what a brand teaches carries over, damped, to its other categories and to 
   const learned = learnFit(profile, [outcome({ brand: 'Northfield Studio', category: 'bottom', size: '8', result: 'returned', fit: 'too-small', area: 'hips' })], charts, products);
   const dress = recommendSize(product('nf-camel-wrap-dress'), profile, learned, charts);
   assert.equal(dress.checks.find(c => c.dimension === 'hips')!.adjustment, 0.75);
+  assert.equal(dress.confidence, 'low');
+  assert.match(dress.note, /hips 0.3 in tight\. L gives the hips room but runs loose elsewhere/);
   const otherBrand = recommendSize(product('da-cream-wide-leg'), profile, learned, charts);
   assert.equal(otherBrand.checks.find(c => c.dimension === 'hips')!.adjustment, 0.5);
 });
@@ -73,7 +75,7 @@ test('garment measurements use the ease of a garment she already likes', () => {
   const roomy: FitProfile = { ...profile, references: [{ id: 'r1', category: 'bottom', label: 'Fictional favourite trousers', measurements: { waist: 30, hips: 45.5 } }] };
   const withReference = recommendSize(jv, roomy, emptyLearnedFit(), charts);
   assert.equal(withReference.size, 'L', 'she likes 5 in of hip ease, so M (43.5 in) is too snug');
-  assert.match(withReference.note, /waist loose by 1.5 in/);
+  assert.match(withReference.note, /Closest size: hips fits, but waist 1.5 in loose/);
   assert.match(withReference.note, /ease of the garment you like/);
 });
 

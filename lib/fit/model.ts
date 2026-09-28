@@ -197,12 +197,15 @@ export function recommendSize(product: Product, profile: FitProfile, learned: Le
   if (best.loss > 0) {
     const onlySlightlyLoose = best.checks.every(c => c.status !== 'tight') && best.loss <= 0.5;
     confidence = onlySlightlyLoose ? 'medium' : 'low';
-    const off = best.checks.filter(c => c.status !== 'inside').map(c => `${c.dimension} ${c.status === 'tight' ? 'tight' : 'loose'} by ${inches(c.status === 'tight' ? c.yours - c.range[1] : c.range[0] - c.yours)}`);
+    const off = best.checks.filter(c => c.status !== 'inside').map(c => `${c.dimension} ${inches(c.status === 'tight' ? c.yours - c.range[1] : c.range[0] - c.yours)} ${c.status === 'tight' ? 'tight' : 'loose'}`);
     const fitting = best.checks.filter(c => c.status === 'inside').map(c => c.dimension);
-    parts.push(`${best.size} is the closest${fitting.length ? ` (${fitting.join(' and ')} fit)` : ''}, but ${off.join(', ')}.`);
+    parts.push(`Closest size: ${fitting.length ? `${fitting.join(' and ')} ${fitting.length > 1 ? 'fit' : 'fits'}, but ` : ''}${off.join(' and ')}.`);
+    const tight = best.checks.filter(c => c.status === 'tight').map(c => c.dimension);
+    const alternative = evaluated.slice(1).find(e => tight.every(d => e.checks.find(c => c.dimension === d)?.status === 'inside'));
+    if (tight.length && alternative) parts.push(`${alternative.size} gives the ${tight.join(' and ')} room but runs loose elsewhere.`);
   } else {
     confidence = charted.length === dimensions.length ? 'medium' : 'low';
-    parts.push(`${best.size}: your ${best.checks.map(c => `${c.dimension} ${inches(c.yours)}`).join(', ')} ${best.checks.length > 1 ? 'all sit' : 'sits'} inside this size.`);
+    parts.push(`Your ${best.checks.map(c => `${c.dimension} (${inches(c.yours)})`).join(' and ')} ${best.checks.length > 1 ? 'fall' : 'falls'} inside ${best.size}.`);
     if (best.edge < BETWEEN_SIZES_EDGE && runnerUp) {
       parts.push(`Between ${best.size} and ${runnerUp} at the ${tightest.dimension}; pick ${runnerUp} if you like room.`);
       confidence = 'low';

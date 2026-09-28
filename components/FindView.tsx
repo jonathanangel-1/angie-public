@@ -32,7 +32,7 @@ function ResultCard({ result, rank, searchId, changedSize, onLogged }: { result:
         <p className="price">{product.price != null ? `$${product.price}` : 'Price at retailer'}</p>
         <div className="similarity" title={similarity.explanation}>
           <div className="bar"><span style={{ width: `${Math.round(similarity.total * 100)}%` }} /></div>
-          <p><strong>{Math.round(similarity.total * 100)}% look-alike.</strong> {similarity.explanation}</p>
+          <p><strong>{Math.round(similarity.total * 100)}% look-alike{similarity.total < 0.55 ? ' · less similar' : ''}.</strong> {similarity.explanation}</p>
         </div>
         <div className={`fit fit-${fit.confidence}`}>
           <div className="fit-head">

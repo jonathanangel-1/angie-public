@@ -10,7 +10,7 @@ export type ProfileSummary = {
   references: ReferenceGarment[];
   adjustments: Array<Adjustment & { text: string }>;
   lengthNotes: Array<{ brand: string; category: Category; fit: string }>;
-  outcomes: Outcome[];
+  outcomes: Array<Outcome & { productName: string | null }>;
   brands: string[];
   productCount: number;
 };

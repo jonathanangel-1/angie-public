@@ -6,6 +6,10 @@ import { colorSimilarity, shapeSimilarity, type ImageFeatures } from '@/lib/matc
 // comparable looks. A near-twin she cannot size still shows, flagged.
 const VISUAL_WEIGHT = 0.75;
 const FIT_WEIGHT = 0.25;
+// Below this an item no longer looks like the inspiration; show it only to
+// avoid an empty page.
+const MIN_SIMILARITY = 0.55;
+const MIN_RESULTS = 3;
 
 export type PublicProduct = Omit<Product, 'features'>;
 export type RankedResult = {
@@ -56,5 +60,6 @@ export function rankProducts(query: ImageFeatures, category: Category | null, pr
       };
     })
     .sort((a, b) => b.score - a.score || a.product.id.localeCompare(b.product.id))
+    .filter((result, index) => result.similarity.total >= MIN_SIMILARITY || index < MIN_RESULTS)
     .slice(0, limit);
 }

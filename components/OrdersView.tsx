@@ -25,7 +25,7 @@ export default function OrdersView({ profile, onChange }: { profile: ProfileSumm
         {profile.outcomes.length ? <table className="orders">
           <thead><tr><th>Brand</th><th>Item</th><th>Size</th><th>Result</th><th /></tr></thead>
           <tbody>{profile.outcomes.map(o => <tr key={o.id}>
-            <td>{o.brand}</td><td>{CATEGORY_LABEL[o.category]}{o.productId ? ` · ${o.productId}` : ''}</td><td>{o.size}</td>
+            <td>{o.brand}</td><td>{o.productName ? `${o.productName} · ` : ''}{CATEGORY_LABEL[o.category]}</td><td>{o.size}</td>
             <td><span className={`tag ${o.result}`}>{o.result}</span> {FIT_LABEL[o.fit]}{o.area ? ` (${o.area})` : ''}{o.reason ? ` · ${o.reason}` : ''}</td>
             <td><button type="button" className="ghost" onClick={() => void remove(o.id)}>Undo</button></td>
           </tr>)}</tbody>

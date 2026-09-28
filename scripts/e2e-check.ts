@@ -83,7 +83,7 @@ await withServer({ PUBLIC_DEMO: '1' }, async () => {
 
   const again = await call<Search>('/api/search', { method: 'POST', json: { features, category: 'auto', searchId: search.searchId } });
   assert.equal(again.results.find(r => r.product.id === 'nf-navy-wide-leg')!.fit.size, '10');
-  assert.equal(again.results.find(r => r.product.id === 'nf-camel-wide-leg')!.fit.size, '10');
+  assert.equal(again.results.find(r => r.product.id === 'nf-blue-straight-jean')!.fit.size, '10', 'a sibling Northfield bottom updates too');
 
   await call('/api/outcomes', { method: 'POST', json: { brand: 'Juniper & Vale', category: 'dress', size: 'M', result: 'kept', fit: 'fits' } });
   const undone = await call<{ profile: { adjustments: Array<{ brand: string }> } }>(`/api/outcomes?id=${logged.outcome.id}`, { method: 'DELETE' });

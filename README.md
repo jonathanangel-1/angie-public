@@ -72,7 +72,7 @@ Possible paid upgrades (not used, nothing purchased): a shopping search API such
 ## Tests
 
 ```sh
-npm test                 # fit model + image matching (22 checks)
+npm test                 # fit model + image matching (23 checks)
 npx --no-install tsc --noEmit
 npm run lint
 npm run build

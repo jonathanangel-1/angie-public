@@ -34,7 +34,7 @@ export function profileSummary(context: UserContext) {
     references: context.profile.references,
     adjustments: describeAdjustments(context.learned),
     lengthNotes: context.learned.lengthNotes,
-    outcomes: [...context.outcomes].reverse(),
+    outcomes: [...context.outcomes].reverse().map(o => ({ ...o, productName: context.products.find(p => p.id === o.productId)?.name ?? null })),
     brands: [...new Set([...context.products.map(p => p.brand), ...context.charts.map(c => c.brand)])].sort(),
     productCount: context.products.length,
   };

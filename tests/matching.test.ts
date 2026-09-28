@@ -41,12 +41,14 @@ for (const c of cases) {
   });
 }
 
-test('a same-silhouette item in another colour ranks below a same-colour item', () => {
+test('a same-silhouette item in another colour ranks below a same-colour item, or drops out', () => {
   const results = rankProducts(inspiration('inspiration-02-camel-wrap-dress.png'), 'dress', products, profile, emptyLearnedFit(), charts);
   const camel = results.findIndex(r => r.product.id === 'nf-camel-wrap-dress');
   const green = results.findIndex(r => r.product.id === 'da-green-wrap-dress');
-  assert.ok(camel < green);
-  assert.match(results[green].similarity.explanation, /different colour/);
+  assert.equal(camel, 0);
+  assert.ok(green === -1 || green > camel);
+  const all = rankProducts(inspiration('inspiration-02-camel-wrap-dress.png'), 'dress', products.filter(p => p.category === 'dress' && p.subtype === 'wrap'), profile, emptyLearnedFit(), charts);
+  assert.match(all.find(r => r.product.id === 'da-green-wrap-dress')!.similarity.explanation, /different colour/);
 });
 
 test('equal look-alikes are ordered by fit confidence', () => {
@@ -65,4 +67,11 @@ test('a product returned for style is not shown again', () => {
 test('the descriptor ignores background gradients, scale and slight rotation', () => {
   const query = inspiration('inspiration-03-white-tee.png');
   assert.ok(query.foreground > 0.1 && query.foreground < 0.5, `foreground ${query.foreground}`);
+});
+
+test('clearly different items are dropped once enough look-alikes exist', () => {
+  const results = rankProducts(inspiration('inspiration-01-navy-wide-leg.png'), 'bottom', products, profile, emptyLearnedFit(), charts);
+  assert.ok(results.length >= 3);
+  assert.ok(results.slice(3).every(r => r.similarity.total >= 0.55));
+  assert.ok(!results.some(r => r.product.id === 'nf-blue-straight-jean' && results.indexOf(r) >= 3));
 });

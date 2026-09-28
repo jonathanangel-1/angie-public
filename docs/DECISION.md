@@ -22,7 +22,7 @@
 | **D. C done properly (chosen):** measurements + brand size charts or garment measurements + a per-brand correction learned from keeps and returns | Best available with one user. It explains itself and improves with each order. | ~0 per search | Medium | Yes: per-user profiles, shared catalog, and pooled brand priors later |
 | E. Collaborative size model ("people who kept M in X keep S in Y") | Strong at scale | Low | Medium | Needs many users. It is the natural v3 layer on top of D. |
 
-A is overkill right now, as Jonathan suspected. B solves the wrong problem. D is shipped.
+A is overkill right now, as suspected. B solves the wrong problem. D is shipped.
 
 ## 3. How we know her size
 
