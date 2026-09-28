@@ -1,4 +1,4 @@
-name: Public edition checks
+name: Checks
 on: [push, pull_request]
 permissions:
   contents: read
@@ -12,7 +12,8 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci --ignore-scripts --no-audit --no-fund
-      - run: npm run test:public
+      - run: npm test
       - run: npx --no-install tsc --noEmit
+      - run: npm run lint
       - run: npm run build
-      - run: npm run test:demo
+      - run: npm run test:e2e

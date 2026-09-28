@@ -1,5 +1,62 @@
 import { index, integer, primaryKey, real, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 
+// v2 fit-first tables. Personal rows are keyed by user_id; the catalog is shared.
+// Runtime creation lives in lib/server/db.ts and must match these definitions.
+export const users = sqliteTable('users', {
+  id: text('id').primaryKey(),
+  createdAt: integer('created_at').notNull(),
+});
+
+export const fitProfiles = sqliteTable('fit_profiles', {
+  userId: text('user_id').primaryKey(),
+  bodyJson: text('body_json').notNull(),
+  referencesJson: text('references_json').notNull(),
+  updatedAt: integer('updated_at').notNull(),
+});
+
+export const fitOutcomes = sqliteTable('fit_outcomes', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  productId: text('product_id'),
+  searchId: text('search_id'),
+  brand: text('brand').notNull(),
+  category: text('category').notNull(),
+  size: text('size').notNull(),
+  result: text('result').notNull(),
+  fit: text('fit').notNull(),
+  area: text('area'),
+  reason: text('reason'),
+  createdAt: integer('created_at').notNull(),
+}, (table) => [index('fit_outcomes_user_time_idx').on(table.userId, table.createdAt)]);
+
+export const searches = sqliteTable('searches', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  category: text('category'),
+  colorName: text('color_name').notNull(),
+  featuresJson: text('features_json').notNull(),
+  resultIdsJson: text('result_ids_json').notNull(),
+  createdAt: integer('created_at').notNull(),
+}, (table) => [index('searches_user_time_idx').on(table.userId, table.createdAt)]);
+
+export const catalogProducts = sqliteTable('catalog_products', {
+  id: text('id').primaryKey(),
+  source: text('source').notNull(),
+  embedderVersion: text('embedder_version').notNull(),
+  dataJson: text('data_json').notNull(),
+  updatedAt: integer('updated_at').notNull(),
+});
+
+export const catalogSizeCharts = sqliteTable('catalog_size_charts', {
+  id: text('id').primaryKey(),
+  source: text('source').notNull(),
+  dataJson: text('data_json').notNull(),
+  updatedAt: integer('updated_at').notNull(),
+});
+
+// v1 tables below are retained unchanged so a generated migration never drops
+// existing history. v2 code does not read or write them.
+
 export const sessions = sqliteTable('sessions', {
   id: text('id').primaryKey(),
   participantName: text('participant_name').notNull(),

@@ -1,8 +1,0 @@
-{
-  "purpose": "Synthetic public edition; no private reference images",
-  "images": {
-    "top": "public/demo/demo-product-01.svg",
-    "bottom": "public/demo/demo-product-04.svg",
-    "dress": "public/demo/demo-product-07.svg"
-  }
-}
