@@ -1,6 +1,7 @@
 node_modules/
 .env*
 !.env.example
+.dev.vars*
 .next/
 dist/
 .vinext/
@@ -18,3 +19,8 @@ coverage/
 *.log
 *.pem
 *.key
+
+# Real personal data and your own catalog files live here, never in Git.
+private/
+data/private/
+*.private.json
