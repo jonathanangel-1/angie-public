@@ -14,8 +14,9 @@
     "test": "tsx --test ./tests/*.test.ts",
     "test:e2e": "tsx scripts/e2e-check.ts",
     "demo:assets": "tsx scripts/build-demo-assets.ts",
-    "catalog:import": "node --env-file-if-exists=.env.local --import tsx scripts/import-catalog.ts",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "garments": "python3 spike/server.py",
+    "spike": "python3 spike/run_spike.py"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

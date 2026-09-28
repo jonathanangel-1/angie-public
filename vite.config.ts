@@ -10,7 +10,7 @@ const publicDemo = (process.env.PUBLIC_DEMO || '1') === '1';
 const localVars: Record<string, string> = { PUBLIC_DEMO: publicDemo ? '1' : '0' };
 // A demo run must never inherit real access codes.
 if (!publicDemo) {
-  for (const name of ['ANGIE_ACCESS_CODE', 'EXTRA_ACCESS_CODES']) {
+  for (const name of ['ANGIE_ACCESS_CODE', 'EXTRA_ACCESS_CODES', 'GARMENT_SERVICE_URL', 'SERPAPI_API_KEY', 'SHOPIFY_CATALOG_URL']) {
     if (process.env[name]) localVars[name] = process.env[name]!;
   }
 }

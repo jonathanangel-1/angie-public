@@ -1,3 +1,5 @@
+> **Superseded by [DECISION-v3.md](DECISION-v3.md).** The client rejected v2's catalog approach. Kept for the record.
+
 # Angie v2: decision record
 
 **Short version.** Keep the premise (upload an inspiration, get look-alikes that fit) but flip where the effort goes. Most of the money and complexity in v1 went into "looks like". But she returns clothes because they don't fit, and v1 handled fit with a lookup table. v2 makes fit the core: her measurements, each brand's size chart or garment measurements, and a per-brand correction learned from every keep and return. Matching becomes a cheap retrieval step over a catalog you control, with a clear upgrade path to a CLIP-class model. No model training, no try-on, no paid APIs.

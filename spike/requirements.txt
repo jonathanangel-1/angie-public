@@ -1,0 +1,8 @@
+# CPU-only is fine: about 4-5 s per look on 4 vCPU.
+# pip install --index-url https://download.pytorch.org/whl/cpu torch==2.14.0 torchvision
+# pip install -r spike/requirements.txt
+transformers>=4.57,<5
+pillow>=11
+numpy>=2
+scipy>=1.14
+requests>=2.32

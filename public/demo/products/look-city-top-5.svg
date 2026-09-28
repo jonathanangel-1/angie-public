@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="600" viewBox="0 0 480 600">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3f1ec"/><stop offset="1" stop-color="#f3f1ec"/></linearGradient>
+<pattern id="stripes" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#efe5cf"/><rect width="24" height="10" fill="#efe5cf"/></pattern></defs>
+<rect width="480" height="600" fill="url(#bg)"/><g transform="translate(240 320) rotate(0) scale(1) translate(-240 -320)"><path d="M175 120 Q240 160 305 120 L385 150 L420 240 L352 262 L350 470 L130 470 L128 262 L60 240 L95 150 Z" fill="#efe5cf" stroke="#9b9587" stroke-width="4" stroke-linejoin="round"/></g></svg>

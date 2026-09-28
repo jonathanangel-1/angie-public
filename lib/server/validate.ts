@@ -1,89 +1,59 @@
-import { CATEGORIES, DIMENSIONS, type BodyMeasurements, type BodySizeChart, type Category, type FitArea, type FitProfile, type Outcome, type OutcomeFit, type Product, type ReferenceGarment } from '@/lib/fit/types';
-import { EMBEDDER_VERSION, type ImageFeatures } from '@/lib/match/embedding';
+import type { Candidate, Garment, Slot } from '@/lib/look/types';
+import { SLOTS } from '@/lib/look/types';
+import { NEVER_OPTIONS, type Never, type Purchase, type Quiz, type ReturnReason } from '@/lib/taste/types';
 
 export class InputError extends Error {}
 
-const FITS: OutcomeFit[] = ['fits', 'tight', 'loose', 'too-small', 'too-large', 'too-short', 'too-long', 'not-fit'];
-const AREAS: FitArea[] = ['bust', 'waist', 'hips', 'length'];
-const REASONS = ['style', 'quality', 'other'] as const;
-const LIMITS: Record<keyof BodyMeasurements, [number, number]> = { bust: [20, 70], waist: [18, 70], hips: [20, 75], inseam: [20, 40], height: [48, 84] };
+const record = (v: unknown) => (v && typeof v === 'object' && !Array.isArray(v) ? v as Record<string, unknown> : {});
+const text = (v: unknown, max: number) => String(v ?? '').trim().slice(0, max);
+const list = (v: unknown, max = 20) => (Array.isArray(v) ? v : typeof v === 'string' ? v.split(',') : []).map(x => text(x, 60)).filter(Boolean).slice(0, max);
+const REASONS: ReturnReason[] = ['too-small', 'too-large', 'too-long', 'too-short', 'quality', 'style', 'color', 'other'];
 
-const record = (value: unknown) => (value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {});
-const text = (value: unknown, max: number) => String(value ?? '').trim().slice(0, max);
-export const category = (value: unknown): Category => {
-  if (!CATEGORIES.includes(value as Category)) throw new InputError('Choose a category.');
-  return value as Category;
+export const slot = (v: unknown): Slot => {
+  if (!SLOTS.includes(v as Slot)) throw new InputError('Unknown garment type.');
+  return v as Slot;
 };
 
-function measurement(name: string, value: unknown, [low, high]: [number, number]) {
-  if (value === null || value === undefined || value === '') return undefined;
-  const number = Number(value);
-  if (!Number.isFinite(number) || number < low || number > high) throw new InputError(`${name} must be between ${low} and ${high} inches.`);
-  return Math.round(number * 10) / 10;
-}
-
-export function parseProfile(input: unknown): FitProfile {
-  const body: BodyMeasurements = {};
-  const rawBody = record(record(input).body);
-  for (const key of Object.keys(LIMITS) as Array<keyof BodyMeasurements>) {
-    const value = measurement(key, rawBody[key], LIMITS[key]);
-    if (value !== undefined) body[key] = value;
-  }
-  const rawReferences = record(input).references;
-  const references: ReferenceGarment[] = (Array.isArray(rawReferences) ? rawReferences : []).slice(0, 20).map((raw, index) => {
-    const ref = record(raw);
-    const measurements: ReferenceGarment['measurements'] = {};
-    for (const d of DIMENSIONS) {
-      const value = measurement(`Garment ${d}`, record(ref.measurements)[d], [20, 90]);
-      if (value !== undefined) measurements[d] = value;
-    }
-    if (!Object.keys(measurements).length) throw new InputError('A reference garment needs at least one measurement.');
-    return { id: text(ref.id, 60) || `ref-${index + 1}`, category: category(ref.category), label: text(ref.label, 80) || 'Garment I like', measurements };
-  });
-  return { body, references };
-}
-
-export function parseOutcome(input: unknown, now: number): Omit<Outcome, 'id'> & { searchId: string | null } {
+export function parseQuiz(input: unknown): Quiz {
   const raw = record(input);
-  const result = raw.result === 'kept' || raw.result === 'returned' ? raw.result : null;
-  if (!result) throw new InputError('Choose kept or returned.');
-  const fit = FITS.includes(raw.fit as OutcomeFit) ? raw.fit as OutcomeFit : null;
-  if (!fit) throw new InputError('Say how it fitted.');
-  const size = text(raw.size, 12);
-  const brand = text(raw.brand, 60);
-  if (!size || !brand) throw new InputError('Brand and size are required.');
-  const area = raw.area ? (AREAS.includes(raw.area as FitArea) ? raw.area as FitArea : null) : null;
-  const reason = REASONS.includes(raw.reason as typeof REASONS[number]) ? raw.reason as typeof REASONS[number] : null;
-  if (fit === 'not-fit' && result === 'returned' && !reason) throw new InputError('Say why it went back.');
-  return { brand, category: category(raw.category), size, productId: text(raw.productId, 80) || null, result, fit, area, reason, createdAt: now, searchId: text(raw.searchId, 60) || null };
-}
-
-export function parseFeatures(input: unknown): ImageFeatures {
-  const raw = record(input);
-  if (raw.version !== EMBEDDER_VERSION) throw new InputError('This image descriptor version is not supported. Reload the page.');
-  const numbers = (value: unknown, length: number) => {
-    if (!Array.isArray(value) || value.length !== length || !value.every(v => typeof v === 'number' && Number.isFinite(v))) throw new InputError('Invalid image descriptor.');
-    return value as number[];
+  const sizes = record(raw.sizes), fit = record(raw.fit), m = record(raw.measurements);
+  const size = (v: unknown) => text(v, 8).toUpperCase() || undefined;
+  const inches = (v: unknown) => { const n = Number(v); return v === '' || v == null || !Number.isFinite(n) ? undefined : n >= 18 && n <= 75 ? n : (() => { throw new InputError('Measurements must be in inches, 18–75.'); })(); };
+  const budget = raw.budgetMax === '' || raw.budgetMax == null ? undefined : Number(raw.budgetMax);
+  if (budget !== undefined && (!Number.isFinite(budget) || budget < 10 || budget > 5000)) throw new InputError('Budget must be between $10 and $5,000.');
+  const reactions = Object.fromEntries(Object.entries(record(raw.imageReactions)).filter(([k, v]) => /^q-[a-z-]+$/.test(k) && (v === 'love' || v === 'no')).slice(0, 20)) as Quiz['imageReactions'];
+  return {
+    sizes: { top: size(sizes.top), bottom: size(sizes.bottom), dress: size(sizes.dress), jeans: size(sizes.jeans) },
+    measurements: { bust: inches(m.bust), waist: inches(m.waist), hips: inches(m.hips) },
+    fit: { top: ['fitted', 'relaxed', 'oversized'].includes(String(fit.top)) ? fit.top as Quiz['fit']['top'] : undefined, bottom: ['fitted', 'straight', 'wide'].includes(String(fit.bottom)) ? fit.bottom as Quiz['fit']['bottom'] : undefined },
+    neverWear: list(raw.neverWear).filter((n): n is Never => (NEVER_OPTIONS as readonly string[]).includes(n)),
+    budgetMax: budget, brandsLove: list(raw.brandsLove), brandsAvoid: list(raw.brandsAvoid), imageReactions: reactions,
   };
-  const aspect = Number(raw.aspect);
-  if (!Number.isFinite(aspect) || aspect <= 0 || aspect > 20) throw new InputError('Invalid image descriptor.');
-  return { version: EMBEDDER_VERSION, shape: numbers(raw.shape, 144), color: numbers(raw.color, 65), aspect, colorName: text(raw.colorName, 20) || 'unknown', foreground: Number(raw.foreground) || 0 };
 }
 
-// Imported catalogs are public retailer data plus descriptors computed by
-// scripts/import-catalog.ts. Validate shape; never trust URLs to be anything but https.
-export function parseCatalog(input: unknown): { products: Product[]; sizeCharts: BodySizeChart[] } {
-  const raw = record(input);
-  const products = (Array.isArray(raw.products) ? raw.products : []).slice(0, 5000).map(value => {
-    const p = record(value);
-    const url = text(p.url, 500);
-    if (!/^https:\/\//.test(url)) throw new InputError(`Product ${text(p.id, 80)} needs an https buy link.`);
-    return { ...(p as unknown as Product), id: text(p.id, 80), brand: text(p.brand, 60), name: text(p.name, 120), category: category(p.category), url, features: parseFeatures(p.features) };
-  });
-  const sizeCharts = (Array.isArray(raw.sizeCharts) ? raw.sizeCharts : []).slice(0, 500).map(value => {
-    const c = record(value);
-    return { ...(c as unknown as BodySizeChart), id: text(c.id, 80), brand: text(c.brand, 60), category: category(c.category) };
-  });
-  if (!products.length) throw new InputError('The catalog has no products.');
-  return { products, sizeCharts };
+export function parseCandidate(input: unknown): Candidate {
+  const r = record(input);
+  const url = text(r.url, 800);
+  if (!/^https:\/\//.test(url)) throw new InputError('Product link must be https.');
+  return { id: text(r.id, 200), title: text(r.title, 200), brand: text(r.brand, 80), url, image: text(r.image, 800), price: Number(r.price) || 0, currency: text(r.currency, 3) || 'USD',
+    sizes: list(r.sizes, 40), fabric: text(r.fabric, 200), rating: r.rating == null ? null : Number(r.rating), reviews: r.reviews == null ? null : Number(r.reviews),
+    sources: list(r.sources, 5), visual: Math.max(0, Math.min(1, Number(r.visual) || 0)) };
+}
+
+export function parseGarment(input: unknown): Garment {
+  const r = record(input), a = record(r.attributes);
+  return { id: text(r.id, 80), slot: slot(r.slot), query: text(r.query, 200), crop: '',
+    attributes: { type: text(a.type, 60), color: text(a.color, 40), pattern: text(a.pattern, 40), fabric: text(a.fabric, 40), vibe: text(a.vibe, 40), length: text(a.length, 20) || undefined } };
+}
+
+export function parsePurchase(input: unknown, source: Purchase['source'], now: number): Purchase {
+  const r = record(input);
+  const status = ['ordered', 'kept', 'returned'].includes(String(r.status)) ? r.status as Purchase['status'] : null;
+  if (!status) throw new InputError('Status must be ordered, kept or returned.');
+  const brand = text(r.brand, 80), title = text(r.title, 200), size = text(r.size, 12);
+  if (!brand || !title || !size) throw new InputError('Brand, item and size are required.');
+  const reason = REASONS.includes(r.returnReason as ReturnReason) ? r.returnReason as ReturnReason : null;
+  if (status === 'returned' && !reason) throw new InputError('Say why it went back.');
+  return { id: text(r.id, 100) || crypto.randomUUID(), brand, title, slot: r.slot ? slot(r.slot) : null, size, status, returnReason: status === 'returned' ? reason : null,
+    price: r.price == null ? null : Number(r.price) || null, source, confidence: Math.max(0.1, Math.min(1, Number(r.confidence) || 1)), createdAt: Number(r.createdAt) || now };
 }

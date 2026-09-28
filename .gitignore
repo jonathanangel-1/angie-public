@@ -24,3 +24,8 @@ coverage/
 private/
 data/private/
 *.private.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/

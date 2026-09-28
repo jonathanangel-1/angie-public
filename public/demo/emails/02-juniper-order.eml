@@ -1,0 +1,14 @@
+From: Juniper & Vale <hello@juniper.example.com>
+Subject: Thanks for your order!
+Date: Sat, 18 Jul 2026 16:40:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="b1"
+
+--b1
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><h1>Order number: JV5531</h1><p>This is a fictional demo email.</p><table><tr><td>Item: Crepe W=
+rap Dress</td></tr><tr><td>Size: M</td></tr><tr><td>Price: &#36;170.00</td></tr></table><table><tr><td>Item: Po=
+plin Button-Down</td></tr><tr><td>Size: S</td></tr><tr><td>Price: &#36;95.00</td></tr></table></body></html>
+--b1--
