@@ -2,95 +2,88 @@
 
 [![Checks](https://github.com/jonathanangel-1/angie-public/actions/workflows/public-checks.yml/badge.svg)](https://github.com/jonathanangel-1/angie-public/actions/workflows/public-checks.yml)
 
-Upload an inspiration image. Angie shows the closest-looking items from your catalog. Each one comes with a buy link, the size to order, and a note on how sure it is. Tell it what you kept or sent back, and why ("too small in the hips"), and the next size gets better.
+Upload a photo of a look. Angie picks out each garment, finds similar items you can buy on the web right now, and ranks them by what you're likely to keep. Each result comes with a buy link, price, suggested size and a return-risk note. There is no catalog to maintain.
 
-Why it is built this way, what was wrong with v1, and what comes next: **[docs/DECISION.md](docs/DECISION.md)**.
+Why it works this way, and what was measured: **[docs/DECISION-v3.md](docs/DECISION-v3.md)**.
 
 ![Demo flow on fictional data](docs/images/flow.png)
 
-## Try the demo (fictional data, no keys)
+## How it works
+
+1. **Garments.** An open-weight model pipeline (`spike/`) finds the main person, segments each garment, splits a jacket from the top under it, and describes each piece. It runs on CPU and needs no key.
+2. **Where to look.** Each piece is searched live by its cropped image and by an attribute query:
+   - **Shopify Global Catalog**, Shopify's official cross-merchant agent endpoint. Keyless.
+   - **Google Lens + Google Shopping via SerpApi**, only if `SERPAPI_API_KEY` is set.
+3. **Ranking** (`lib/taste/`):
+   - look-alike score, learned taste, return risk and budget;
+   - hard "never wear" and "brands I avoid" filters;
+   - suggested size from what you kept or returned at that brand, else your usual size.
+
+## Try the demo (fictional data, no keys, no Python)
 
 Requires Node.js 24 (22.9+ works).
 
 ```sh
 npm ci --ignore-scripts
-npm run demo
+npm run demo            # http://127.0.0.1:4175, code: demo-participant
 ```
 
-Open http://127.0.0.1:4175 and enter `demo-participant`.
+1. **My taste:** the day-one quiz is pre-filled for the fictional demo person. Try **Load 7 fictional sample emails**, review the parsed orders and returns, then **Import**.
+2. **Look:** pick a fictional look. You'll see its pieces, and for each piece a set of matches with buy links, suggested size and return risk. After the import, the Northfield trouser suggestion moves from 8 to 10, because of a "too small" return found in the emails.
+3. Give feedback: **♥ Love**, **Not for me** (and why), **I bought it**, then **Kept it** or **Returned it** (and why). The look re-ranks immediately.
 
-1. **Find:** pick one of the fictional inspirations (or upload any product photo or flat-lay), then click **Find matches that fit**.
-2. Each result shows a look-alike score, **Your size** with a fit-confidence level and a note, and a **Buy at …** link. Links go to `shop.example.com` and nothing can be bought.
-3. Click **Log keep / return** on the top trouser: *Returned it · 8 · Too small · Hips*. The card shows what was learned ("Northfield Studio bottoms: treat your hips as +1 in"), and the sizes on every Northfield bottom update from 8 to 10.
-4. **My fit** shows measurements, garments you love, and everything learned so far. **Orders** lists every keep and return, with undo. **Reset demo** restores the fictional baseline.
-
-Every person, brand, product, size chart and link in the demo is invented.
+In demo mode, garment detection and product search are **mocked** with fictional fixtures. Everything else (ranking, taste, sizing, email parsing, storage) is the real code.
 
 ## Use it for real (private, local)
 
-Your data stays on your machine: the local database lives in `.wrangler/`, which is gitignored. Photos never leave the browser; only a small image descriptor is sent to the server. **Never commit real measurements, orders or photos.** Keep your own catalog files in `private/`, which is also gitignored.
-
 ```sh
-cp .env.example .env.local        # set ANGIE_ACCESS_CODE to a long random string
-npm run dev                       # http://127.0.0.1:3000, demo access is off
+# 1. The garment service (Python 3.10+, CPU only, ~3 GB RAM, models download once from Hugging Face)
+python3 -m venv .venv && . .venv/bin/activate
+pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision
+pip install -r spike/requirements.txt
+python spike/server.py                   # http://127.0.0.1:8765
+
+# 2. The app
+cp .env.example .env.local               # set ANGIE_ACCESS_CODE
+npm run dev                              # http://127.0.0.1:3000
 ```
 
-1. Sign in with your code. Open **My fit** and enter bust, waist and hips (the day-one minimum). Add inseam and one garment you love if you can: lay it flat, measure across, double it.
-2. Open **Orders** and add your last 3–5 orders with kept/returned and the reason.
-3. Import the products you want to search (next section), then use **Find**.
+Your quiz answers, orders and reactions stay in the local database under `.wrangler/`, which is gitignored. Photos are processed in memory and never stored. Search results are never cached, as Shopify's catalog terms require. **Never commit real photos, orders or emails.** Keep any personal files in `private/`, which is also gitignored.
 
-### Add real products
+### Keys
 
-The catalog is a JSON file of public product data plus each brand's size chart. See [`examples/catalog.example.json`](examples/catalog.example.json):
+| Variable | Needed? | What |
+| --- | --- | --- |
+| `ANGIE_ACCESS_CODE` | yes (private mode) | Your sign-in code. |
+| `GARMENT_SERVICE_URL` | yes (private mode) | Where `spike/server.py` runs. |
+| `SERPAPI_API_KEY` | optional, paid | Adds Google Lens + Shopping for stores not on Shopify. The free plan has 250 searches/month (~60 looks). Google Lens also needs crop hosting, which is not built yet, so only Google Shopping runs. |
+| `EXTRA_ACCESS_CODES` | optional | More people: `userId:code,…`. |
 
-- `products[]`: `id`, `brand`, `name`, `category` (`top`, `dress`, `bottom`, `layer`), `color`, `price`, `url` (the https buy link), `image` (the https image URL to display), `sizes`, `fitIntent` (`fitted`, `regular`, `relaxed`), and optionally `inseam`.
-  - Give either `sizeChartId` (points at a brand body chart) or `garmentSizes` (per-size garment measurements, which are more accurate).
-  - Optionally `imageFile`, a local image used for matching instead of downloading `image`.
-- `sizeCharts[]`: `{ id, brand, category, sizes: [{ size, body: { bust: [lo, hi], waist: [lo, hi], hips: [lo, hi] } }] }`, in inches.
+Nothing is purchased or signed up for by this project.
+
+## The spike (real public photos)
 
 ```sh
-# with `npm run dev` running and ANGIE_IMPORT_CODE set in .env.local
-npm run catalog:import -- private/my-catalog.json
+python spike/run_spike.py /tmp/spike-out   # writes spike_0N_*.png and spike_results.json
 ```
 
-Image descriptors are computed locally by the import script. Where products come from, and which sources are free, gated or paid, is covered in [DECISION.md §4](docs/DECISION.md#4-looking-like-the-inspiration). In short: start with the brands she already buys from, and don't scrape retailers.
-
-### API keys
-
-None required. Nothing in v2 calls a paid service. Every variable is listed in [`.env.example`](.env.example):
-
-| Variable | Purpose |
-| --- | --- |
-| `ANGIE_ACCESS_CODE` | Your private sign-in code (user `angie`). |
-| `EXTRA_ACCESS_CODES` | More people later: `userId:code,userId:code`. |
-| `ANGIE_URL`, `ANGIE_IMPORT_CODE` | Used by the catalog import script. |
-| `PUBLIC_DEMO` | Set by `npm run demo` and `npm run dev`. Never enable it with real data. |
-| `ANGIE_STATE_DIR` | Tests only: a throwaway database directory. |
-
-Possible paid upgrades (not used, nothing purchased): a shopping search API such as SerpApi's Google Shopping for discovery, or hosted inference for a fashion CLIP model. Affiliate product feeds (Rakuten Advertising, CJ, Impact, AWIN) are free but need publisher approval.
+It downloads the five photos listed in [`spike/photos.json`](spike/photos.json) (Wikimedia Commons, CC0 / CC BY 2.0, with source and author). It then runs the full pipeline against the live Shopify catalog and records timings and every API call. The photos are not committed.
 
 ## Tests
 
 ```sh
-npm test                 # fit model + image matching (23 checks)
-npx --no-install tsc --noEmit
-npm run lint
-npm run build
-npm run test:e2e         # real routes + local D1 in a temp dir: demo flow, then private mode with a catalog import
+npm test                 # taste model, sizing, return risk, email parsing, source parsers
+npx --no-install tsc --noEmit && npm run lint && npm run build
+npm run test:e2e         # real routes + local D1 in a temp dir: demo flow, then private mode against a local stub (no third-party calls)
 ```
-
-`test:e2e` starts its own server on port 4185 and never touches your local data.
 
 ## Layout
 
 | Path | What |
 | --- | --- |
-| `lib/fit/` | Size recommendation and the keep/return learner. Pure and fully tested. |
-| `lib/match/` | Image descriptor (runs in the browser and in Node) and ranking. |
-| `lib/server/` | Access codes, D1 storage keyed by user, validation. |
-| `app/api/` | `access`, `profile`, `search`, `outcomes`, `catalog`, `demo/reset`. |
-| `components/` | Find, My fit, Orders. |
-| `data/demo/` | Fictional catalog and profile. Regenerate with `npm run demo:assets`. |
-| `drizzle/0007_v2_fit_first.sql` | Additive migration for a deployed D1. v1 tables are left untouched. |
-
-To deploy on Cloudflare Workers, apply the migrations to your D1 database, set `ANGIE_ACCESS_CODE` as a secret, and keep `PUBLIC_DEMO` unset.
+| `spike/` | Garment pipeline (Python, open models), the Shopify spike, and the HTTP garment service. |
+| `lib/look/` | Garment providers, product sources (Shopify, SerpApi, demo) and the per-look pipeline. |
+| `lib/taste/` | Quiz types, features, taste and return-risk ranking, size suggestion, email import. |
+| `lib/server/` | Access codes, D1 storage keyed by user, validation, provider selection. |
+| `app/api/` | `look`, `rank`, `feedback`, `taste`, `emails/preview`, `emails/import`, `records`, `demo/reset`, `access`. |
+| `public/demo/` | Fictional looks, products, quiz swatches and sample `.eml` emails. Regenerate with `npm run demo:assets`. |
