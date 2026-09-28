@@ -1,5 +1,39 @@
 import { index, integer, primaryKey, real, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 
+// v3 taste tables. Personal rows only; product search results are never stored.
+export const tasteProfiles = sqliteTable('taste_profiles', {
+  userId: text('user_id').primaryKey(),
+  quizJson: text('quiz_json').notNull(),
+  updatedAt: integer('updated_at').notNull(),
+});
+
+export const purchases = sqliteTable('purchases', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  brand: text('brand').notNull(),
+  title: text('title').notNull(),
+  slot: text('slot'),
+  size: text('size').notNull(),
+  status: text('status').notNull(),
+  returnReason: text('return_reason'),
+  price: real('price'),
+  source: text('source').notNull(),
+  confidence: real('confidence').notNull(),
+  createdAt: integer('created_at').notNull(),
+}, (table) => [index('purchases_user_time_idx').on(table.userId, table.createdAt)]);
+
+export const reactions = sqliteTable('reactions', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  brand: text('brand').notNull(),
+  title: text('title').notNull(),
+  featuresJson: text('features_json').notNull(),
+  reaction: text('reaction').notNull(),
+  reason: text('reason'),
+  createdAt: integer('created_at').notNull(),
+}, (table) => [index('reactions_user_time_idx').on(table.userId, table.createdAt)]);
+
+// v2 tables (superseded, unused by v3) are kept so no migration drops data.
 // v2 fit-first tables. Personal rows are keyed by user_id; the catalog is shared.
 // Runtime creation lives in lib/server/db.ts and must match these definitions.
 export const users = sqliteTable('users', {

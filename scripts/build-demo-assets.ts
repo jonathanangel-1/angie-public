@@ -1,10 +1,9 @@
-// Generates the fictional demo catalog: garment illustrations, inspiration
-// images, size charts and image descriptors. Every brand, product and
-// measurement here is invented. Run: npm run demo:assets
+// Generates the fictional v3 demo: illustrated looks worn by a drawn figure,
+// a crop per piece, fictional products per piece and quiz swatches. Every
+// brand, product, price and link is invented. Run: npm run demo:assets
+import { createHash } from 'node:crypto';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { Resvg } from '@resvg/resvg-js';
-import { describeImage, EMBEDDER_VERSION } from '../lib/match/embedding';
-import type { BodySizeChart, Category, FitIntent, GarmentSizes, Product } from '../lib/fit/types';
 
 type Shape = 'tee' | 'vneck' | 'knit' | 'shirt' | 'cami' | 'wrap' | 'column' | 'slip' | 'shirtdress' | 'wide' | 'straight' | 'jean' | 'skirt' | 'blazer' | 'coat' | 'jacket';
 
@@ -58,121 +57,115 @@ function svg(shape: Shape, fill: string, options: { stripes?: string; background
 <rect width="480" height="600" fill="url(#bg)"/><g transform="${transform}">${garment(shape, fill, options.stripes)}</g></svg>`;
 }
 
-const png = (source: string) => new Resvg(source, { fitTo: { mode: 'width', value: 480 } }).render();
 
-const COLORS: Record<string, string> = {
-  white: '#f7f6f2', black: '#232325', navy: '#26324f', grey: '#8c8c8a', cream: '#efe5cf', blue: '#6d93c4', sage: '#a2b08c',
-  camel: '#b8895a', green: '#3f6b4a', rust: '#a8522e', denim: '#4f6f9a',
+const png = (source: string) => new Resvg(source).render().asPng();
+const C: Record<string, string> = {
+  black: '#232325', white: '#f7f6f2', navy: '#26324f', grey: '#8c8c8a', cream: '#efe5cf', camel: '#b8895a', rust: '#a8522e', green: '#3f6b4a',
+  olive: '#6b6b3a', blue: '#6d93c4', red: '#b3262e', pink: '#e3a3b4', sage: '#a2b08c', brown: '#6b4a2f', charcoal: '#3c3c3e', denim: '#4f6f9a',
 };
 
-// Body-measurement charts, in inches, as a brand would publish them.
-const letters = (brand: string, category: Category, rows: Array<[string, Partial<Record<'bust' | 'waist' | 'hips', [number, number]>>]>): BodySizeChart => ({
-  id: `${brand.toLowerCase().replace(/[^a-z]+/g, '-')}-${category}`, brand, category, sizes: rows.map(([size, body]) => ({ size, body })),
-});
-const standard: Array<[string, { bust: [number, number]; waist: [number, number]; hips: [number, number] }]> = [
-  ['XS', { bust: [31, 32.5], waist: [24, 25.5], hips: [34, 35.5] }],
-  ['S', { bust: [33, 34.5], waist: [26, 27.5], hips: [36, 37.5] }],
-  ['M', { bust: [35, 36.5], waist: [28, 29.5], hips: [38, 39.5] }],
-  ['L', { bust: [37, 39], waist: [30, 32], hips: [40, 42] }],
-  ['XL', { bust: [39.5, 41.5], waist: [32.5, 34.5], hips: [42.5, 44.5] }],
-];
-const pick = <K extends 'bust' | 'waist' | 'hips'>(keys: K[]) => standard.map(([size, body]) => [size, Object.fromEntries(keys.map(k => [k, body[k]]))] as [string, Partial<Record<K, [number, number]>>]);
-const northfieldLetters: Array<[string, { bust: [number, number]; waist: [number, number]; hips: [number, number] }]> = [
-  ['XS', { bust: [31, 33], waist: [24, 26], hips: [34, 36.5] }],
-  ['S', { bust: [33, 35], waist: [26, 28], hips: [36.5, 38.5] }],
-  ['M', { bust: [35, 37], waist: [28, 30], hips: [38.5, 41] }],
-  ['L', { bust: [37, 39.5], waist: [30, 32.5], hips: [41, 43.5] }],
-  ['XL', { bust: [39.5, 42], waist: [32.5, 35], hips: [43.5, 46] }],
-];
-const charts: BodySizeChart[] = [
-  letters('Demo Atelier', 'top', pick(['bust', 'waist'])),
-  letters('Demo Atelier', 'dress', pick(['bust', 'waist', 'hips'])),
-  letters('Demo Atelier', 'bottom', pick(['waist', 'hips'])),
-  letters('Demo Atelier', 'layer', pick(['bust'])),
-  letters('Northfield Studio', 'top', northfieldLetters.map(([s, b]) => [s, { bust: b.bust, waist: b.waist }])),
-  letters('Northfield Studio', 'dress', northfieldLetters),
-  letters('Northfield Studio', 'layer', northfieldLetters.map(([s, b]) => [s, { bust: b.bust }])),
-  letters('Northfield Studio', 'bottom', [
-    ['2', { waist: [25, 26], hips: [35, 36.5] }], ['4', { waist: [26, 27], hips: [36.5, 37.5] }],
-    ['6', { waist: [27, 28], hips: [37.5, 39] }], ['8', { waist: [28, 29.5], hips: [39, 41] }],
-    ['10', { waist: [29.5, 31], hips: [41, 42.5] }], ['12', { waist: [31, 32.5], hips: [42.5, 44] }],
-  ]),
-];
-
-type Seed = { id: string; brand: string; name: string; category: Category; subtype: string; shape: Shape; color: string; stripes?: string; price: number; fitIntent?: FitIntent; garment?: GarmentSizes; inseam?: number };
-const garmentRows = (rows: Array<[string, Partial<Record<'bust' | 'waist' | 'hips', number>>]>): GarmentSizes => rows.map(([size, garment]) => ({ size, garment }));
-const seeds: Seed[] = [
-  { id: 'da-white-crew-tee', brand: 'Demo Atelier', name: 'Cotton crew tee', category: 'top', subtype: 'tee', shape: 'tee', color: 'white', price: 38 },
-  { id: 'mb-white-vneck-tee', brand: 'Marlow Basics', name: 'Everyday V-neck tee', category: 'top', subtype: 'tee', shape: 'vneck', color: 'white', price: 24 },
-  { id: 'nf-black-fitted-tee', brand: 'Northfield Studio', name: 'Fitted rib tee', category: 'top', subtype: 'tee', shape: 'tee', color: 'black', price: 42, fitIntent: 'fitted' },
-  { id: 'jv-striped-tee', brand: 'Juniper & Vale', name: 'Breton stripe tee', category: 'top', subtype: 'tee', shape: 'tee', color: 'white', stripes: COLORS.navy, price: 48,
-    garment: garmentRows([['S', { bust: 36, waist: 35 }], ['M', { bust: 38, waist: 37 }], ['L', { bust: 40, waist: 39 }]]) },
-  { id: 'da-grey-knit', brand: 'Demo Atelier', name: 'Fine merino crew', category: 'top', subtype: 'knit', shape: 'knit', color: 'grey', price: 88 },
-  { id: 'jv-cream-knit', brand: 'Juniper & Vale', name: 'Relaxed cotton sweater', category: 'top', subtype: 'knit', shape: 'knit', color: 'cream', price: 120, fitIntent: 'relaxed',
-    garment: garmentRows([['S', { bust: 40 }], ['M', { bust: 42 }], ['L', { bust: 44 }]]) },
-  { id: 'jv-blue-poplin-shirt', brand: 'Juniper & Vale', name: 'Poplin button-down', category: 'top', subtype: 'shirt', shape: 'shirt', color: 'blue', price: 95,
-    garment: garmentRows([['S', { bust: 37, waist: 35 }], ['M', { bust: 39, waist: 37 }], ['L', { bust: 41, waist: 39 }]]) },
-  { id: 'nf-sage-cami', brand: 'Northfield Studio', name: 'Silky cami', category: 'top', subtype: 'cami', shape: 'cami', color: 'sage', price: 45 },
-  { id: 'nf-camel-wrap-dress', brand: 'Northfield Studio', name: 'Wrap midi dress', category: 'dress', subtype: 'wrap', shape: 'wrap', color: 'camel', price: 148 },
-  { id: 'da-green-wrap-dress', brand: 'Demo Atelier', name: 'Jersey wrap dress', category: 'dress', subtype: 'wrap', shape: 'wrap', color: 'green', price: 135 },
-  { id: 'jv-black-wrap-dress', brand: 'Juniper & Vale', name: 'Crepe wrap dress', category: 'dress', subtype: 'wrap', shape: 'wrap', color: 'black', price: 170,
-    garment: garmentRows([['S', { bust: 37, waist: 29, hips: 41 }], ['M', { bust: 39, waist: 31, hips: 43 }], ['L', { bust: 41, waist: 33, hips: 45 }]]) },
-  { id: 'da-black-column-dress', brand: 'Demo Atelier', name: 'Column dress', category: 'dress', subtype: 'column', shape: 'column', color: 'black', price: 120 },
-  { id: 'jv-rust-slip-dress', brand: 'Juniper & Vale', name: 'Bias slip dress', category: 'dress', subtype: 'slip', shape: 'slip', color: 'rust', price: 160, fitIntent: 'fitted',
-    garment: garmentRows([['S', { bust: 35, waist: 29, hips: 39 }], ['M', { bust: 37, waist: 31, hips: 41 }], ['L', { bust: 39, waist: 33, hips: 43 }]]) },
-  { id: 'mb-navy-shirt-dress', brand: 'Marlow Basics', name: 'Belted shirt dress', category: 'dress', subtype: 'shirtdress', shape: 'shirtdress', color: 'navy', price: 98 },
-  { id: 'nf-navy-wide-leg', brand: 'Northfield Studio', name: 'Harbor wide-leg trouser', category: 'bottom', subtype: 'wide-leg', shape: 'wide', color: 'navy', price: 118, inseam: 31 },
-  { id: 'jv-navy-wide-leg', brand: 'Juniper & Vale', name: 'Pleated wide-leg trouser', category: 'bottom', subtype: 'wide-leg', shape: 'wide', color: 'navy', price: 135, inseam: 32,
-    garment: garmentRows([['S', { waist: 28.5, hips: 41.5 }], ['M', { waist: 30.5, hips: 43.5 }], ['L', { waist: 32.5, hips: 45.5 }]]) },
-  { id: 'nf-camel-wide-leg', brand: 'Northfield Studio', name: 'Harbor wide-leg trouser', category: 'bottom', subtype: 'wide-leg', shape: 'wide', color: 'camel', price: 118, inseam: 31 },
-  { id: 'da-cream-wide-leg', brand: 'Demo Atelier', name: 'Linen wide-leg trouser', category: 'bottom', subtype: 'wide-leg', shape: 'wide', color: 'cream', price: 105, inseam: 32 },
-  { id: 'da-black-straight-trouser', brand: 'Demo Atelier', name: 'Straight tailored trouser', category: 'bottom', subtype: 'straight', shape: 'straight', color: 'black', price: 98, inseam: 30 },
-  { id: 'nf-blue-straight-jean', brand: 'Northfield Studio', name: 'Straight jean', category: 'bottom', subtype: 'jean', shape: 'jean', color: 'denim', price: 110, inseam: 30 },
-  { id: 'mb-black-midi-skirt', brand: 'Marlow Basics', name: 'A-line midi skirt', category: 'bottom', subtype: 'skirt', shape: 'skirt', color: 'black', price: 68 },
-  { id: 'nf-black-blazer', brand: 'Northfield Studio', name: 'Single-breasted blazer', category: 'layer', subtype: 'blazer', shape: 'blazer', color: 'black', price: 198 },
-  { id: 'mb-navy-blazer', brand: 'Marlow Basics', name: 'Soft blazer', category: 'layer', subtype: 'blazer', shape: 'blazer', color: 'navy', price: 140 },
-  { id: 'jv-camel-coat', brand: 'Juniper & Vale', name: 'Wool wrap coat', category: 'layer', subtype: 'coat', shape: 'coat', color: 'camel', price: 260, fitIntent: 'relaxed',
-    garment: garmentRows([['S', { bust: 41 }], ['M', { bust: 43 }], ['L', { bust: 45 }]]) },
-  { id: 'da-grey-jacket', brand: 'Demo Atelier', name: 'Boxy wool jacket', category: 'layer', subtype: 'jacket', shape: 'jacket', color: 'grey', price: 150 },
-];
-
-const inspirations: Array<{ file: string; shape: Shape; fill: string; background: [string, string]; rotate: number; scale: number }> = [
-  { file: 'inspiration-01-navy-wide-leg.png', shape: 'wide', fill: '#2b3656', background: ['#e8dcd2', '#d8c8bc'], rotate: -3, scale: 0.9 },
-  { file: 'inspiration-02-camel-wrap-dress.png', shape: 'wrap', fill: '#bd8f60', background: ['#dfe3e6', '#cdd3d8'], rotate: 2, scale: 0.88 },
-  { file: 'inspiration-03-white-tee.png', shape: 'tee', fill: '#fbfaf7', background: ['#d9cbb8', '#cdbda8'], rotate: 4, scale: 0.85 },
-  { file: 'inspiration-04-black-blazer.png', shape: 'blazer', fill: '#29292b', background: ['#ece6dc', '#ddd4c6'], rotate: -2, scale: 0.9 },
-];
-
-rmSync('public/demo', { recursive: true, force: true });
-mkdirSync('public/demo/products', { recursive: true });
-mkdirSync('public/demo/inspiration', { recursive: true });
-mkdirSync('data/demo', { recursive: true });
-
-const products: Product[] = seeds.map(seed => {
-  const source = svg(seed.shape, COLORS[seed.color], { stripes: seed.stripes });
-  writeFileSync(`public/demo/products/${seed.id}.svg`, source);
-  const image = png(source);
-  const features = describeImage({ width: image.width, height: image.height, data: image.pixels });
-  const sizes = seed.garment ? seed.garment.map(r => r.size) : seed.brand === 'Northfield Studio' && seed.category === 'bottom' ? ['2', '4', '6', '8', '10', '12'] : ['XS', 'S', 'M', 'L', 'XL'];
-  const chart = charts.find(c => c.brand === seed.brand && c.category === seed.category);
-  return {
-    id: seed.id, brand: seed.brand, name: seed.name, category: seed.category, subtype: seed.subtype, color: seed.stripes ? 'navy stripe' : seed.color,
-    price: seed.price, currency: 'USD', url: `https://shop.example.com/${seed.brand.toLowerCase().replace(/[^a-z]+/g, '-')}/${seed.id}`,
-    image: `/demo/products/${seed.id}.svg`, sizes, fitIntent: seed.fitIntent || 'regular',
-    ...(seed.garment ? { garmentSizes: seed.garment } : chart ? { sizeChartId: chart.id } : {}),
-    ...(seed.inseam ? { inseam: seed.inseam } : {}),
-    features,
-  } as Product & { features: ReturnType<typeof describeImage> };
-});
-
-for (const inspiration of inspirations) {
-  writeFileSync(`public/demo/inspiration/${inspiration.file}`, png(svg(inspiration.shape, inspiration.fill, inspiration)).asPng());
+// A drawn figure wearing the pieces; background is a plain street scene.
+function lookSvg(pieces: Array<{ shape: Shape; color: string; layer: 'dress' | 'top' | 'outer' | 'bottom' }>) {
+  const skin = '#d9a88a';
+  const place = { dress: 'translate(97 118) scale(0.6)', top: 'translate(120 118) scale(0.5)', outer: 'translate(108 108) scale(0.55)', bottom: 'translate(122 320) scale(0.5)' };
+  const order = ['bottom', 'dress', 'top', 'outer'] as const;
+  const g = order.flatMap(layer => pieces.filter(p => p.layer === layer)).map(p => `<g transform="${place[p.layer]}">${garment(p.shape, C[p.color])}</g>`).join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="720" viewBox="0 0 480 720">
+<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e2d8"/><stop offset="1" stop-color="#d7cdbf"/></linearGradient></defs>
+<rect width="480" height="720" fill="url(#sky)"/><rect x="0" y="600" width="480" height="120" fill="#b9ad9d"/>
+<rect x="30" y="60" width="90" height="540" fill="#cfc4b4"/><rect x="360" y="90" width="100" height="510" fill="#c9bdac"/>
+<path d="M208 620 L214 470 L232 470 L230 620 Z M250 620 L248 470 L266 470 L272 620 Z" fill="${skin}"/>
+<ellipse cx="220" cy="628" rx="18" ry="8" fill="#2a2a2a"/><ellipse cx="262" cy="628" rx="18" ry="8" fill="#2a2a2a"/>
+<path d="M150 180 L118 360 L132 364 L166 196 Z M330 180 L362 360 L348 364 L314 196 Z" fill="${skin}"/>
+<path d="M202 80 Q202 28 240 28 Q278 28 278 80 L280 150 L200 150 Z" fill="#4a3426"/>
+<rect x="228" y="100" width="24" height="30" fill="${skin}"/><ellipse cx="240" cy="84" rx="27" ry="32" fill="${skin}"/>
+<path d="M212 66 Q226 44 262 52 Q270 60 268 70 Q244 58 212 66 Z" fill="#4a3426"/>
+${g}
+<text x="240" y="706" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#5b5146">FICTIONAL DEMO LOOK</text></svg>`;
 }
 
-writeFileSync('data/demo/catalog.json', JSON.stringify({
-  notice: 'Fictional demo catalog. Brands, products, prices, links and size charts are invented.',
-  embedderVersion: EMBEDDER_VERSION,
-  sizeCharts: charts,
-  products,
-}, null, 1) + '\n');
-console.log(`Wrote ${products.length} fictional products, ${charts.length} size charts and ${inspirations.length} inspiration images.`);
+const product = (shape: Shape, color: string, stripes?: string) => svg(shape, C[color], { stripes: stripes ? C[stripes] : undefined });
+
+type Spec = { id: string; slot: 'dress' | 'outerwear' | 'top' | 'skirt' | 'pants'; shape: Shape; color: string; layer: 'dress' | 'top' | 'outer' | 'bottom';
+  attributes: Record<string, string>; query: string;
+  candidates: Array<{ n: string; brand: string; title: string; shape: Shape; color: string; stripes?: string; price: number; fabric: string; sizes: string[]; rating?: [number, number]; visual: number }> };
+
+const LETTERS = ['XS', 'S', 'M', 'L', 'XL'];
+const NUMBERS = ['2', '4', '6', '8', '10', '12'];
+const looks: Array<{ id: string; title: string; file: string; pieces: Spec[] }> = [
+  { id: 'look-city', title: 'Weekend city look', file: 'look-01-city.png', pieces: [
+    { id: 'look-city-outer', slot: 'outerwear', shape: 'jacket', color: 'black', layer: 'outer', attributes: { type: 'leather biker jacket', color: 'black', pattern: 'solid', fabric: 'leather', vibe: 'edgy' }, query: 'black leather biker jacket women', candidates: [
+      { n: '1', brand: 'Northfield Studio', title: 'Moto Leather Jacket', shape: 'jacket', color: 'black', price: 298, fabric: 'Fabric: 100% lamb leather', sizes: LETTERS, rating: [4.7, 212], visual: 0.93 },
+      { n: '2', brand: 'Coastline Supply', title: 'Faux Leather Biker Jacket', shape: 'jacket', color: 'black', price: 89, fabric: 'Fabric: 100% polyester, PU coating', sizes: LETTERS, rating: [3.6, 140], visual: 0.9 },
+      { n: '3', brand: 'Juniper & Vale', title: 'Cropped Leather Jacket', shape: 'jacket', color: 'brown', price: 340, fabric: 'Fabric: 100% leather', sizes: ['S', 'M', 'L'], rating: [4.5, 60], visual: 0.78 },
+      { n: '4', brand: 'Rue Minuit', title: 'Vegan Leather Moto Jacket', shape: 'jacket', color: 'black', price: 120, fabric: 'Fabric: polyurethane', sizes: LETTERS, visual: 0.88 },
+      { n: '5', brand: 'Demo Atelier', title: 'Boxy Wool Jacket', shape: 'jacket', color: 'charcoal', price: 150, fabric: 'Fabric: 80% wool', sizes: LETTERS, rating: [4.4, 35], visual: 0.66 },
+      { n: '6', brand: 'Marlow Basics', title: 'Soft Blazer', shape: 'blazer', color: 'black', price: 140, fabric: 'Fabric: cotton blend', sizes: LETTERS, rating: [4.2, 88], visual: 0.62 },
+    ] },
+    { id: 'look-city-top', slot: 'top', shape: 'tee', color: 'white', layer: 'top', attributes: { type: 't-shirt', color: 'white', pattern: 'solid', fabric: 'jersey', vibe: 'casual' }, query: 'white t-shirt women', candidates: [
+      { n: '1', brand: 'Marlow Basics', title: 'Everyday Crew Tee', shape: 'tee', color: 'white', price: 24, fabric: 'Fabric: 100% cotton', sizes: LETTERS, rating: [4.6, 900], visual: 0.94 },
+      { n: '2', brand: 'Demo Atelier', title: 'Heavyweight Cotton Tee', shape: 'tee', color: 'white', price: 42, fabric: 'Fabric: 100% organic cotton', sizes: LETTERS, rating: [4.8, 150], visual: 0.92 },
+      { n: '3', brand: 'Coastline Supply', title: 'Cropped Baby Tee', shape: 'tee', color: 'white', price: 18, fabric: 'Fabric: cotton, elastane', sizes: LETTERS, visual: 0.88 },
+      { n: '4', brand: 'Juniper & Vale', title: 'Breton Stripe Tee', shape: 'tee', color: 'white', stripes: 'navy', price: 48, fabric: 'Fabric: 100% cotton', sizes: ['S', 'M', 'L'], rating: [4.5, 70], visual: 0.7 },
+      { n: '5', brand: 'Northfield Studio', title: 'Fitted Rib Tee', shape: 'tee', color: 'cream', price: 42, fabric: 'Fabric: modal, elastane', sizes: LETTERS, rating: [4.3, 44], visual: 0.84 },
+    ] },
+    { id: 'look-city-pants', slot: 'pants', shape: 'wide', color: 'navy', layer: 'bottom', attributes: { type: 'wide-leg trousers', color: 'navy', pattern: 'solid', fabric: 'wool', vibe: 'minimalist' }, query: 'navy wide-leg trousers women', candidates: [
+      { n: '1', brand: 'Northfield Studio', title: 'Harbor Wide-Leg Trouser Navy', shape: 'wide', color: 'navy', price: 118, fabric: 'Fabric: 70% wool, 30% polyamide', sizes: NUMBERS, rating: [4.6, 310], visual: 0.95 },
+      { n: '2', brand: 'Juniper & Vale', title: 'Pleated Wide-Leg Trouser', shape: 'wide', color: 'navy', price: 135, fabric: 'Fabric: 100% wool', sizes: ['S', 'M', 'L'], rating: [4.7, 95], visual: 0.93 },
+      { n: '3', brand: 'Demo Atelier', title: 'Linen Wide-Leg Trouser', shape: 'wide', color: 'cream', price: 105, fabric: 'Fabric: 100% linen', sizes: LETTERS, rating: [4.4, 60], visual: 0.72 },
+      { n: '4', brand: 'Coastline Supply', title: 'Low Rise Wide-Leg Pant', shape: 'wide', color: 'navy', price: 59, fabric: 'Fabric: polyester', sizes: LETTERS, visual: 0.9 },
+      { n: '5', brand: 'Demo Atelier', title: 'Straight Tailored Trouser', shape: 'straight', color: 'navy', price: 98, fabric: 'Fabric: wool blend', sizes: LETTERS, rating: [4.5, 120], visual: 0.8 },
+      { n: '6', brand: 'Rue Minuit', title: 'Wide-Leg Sailor Pant', shape: 'wide', color: 'navy', price: 390, fabric: 'Fabric: 100% wool', sizes: LETTERS, visual: 0.91 },
+    ] },
+  ] },
+  { id: 'look-dinner', title: 'Dinner look', file: 'look-02-dinner.png', pieces: [
+    { id: 'look-dinner-dress', slot: 'dress', shape: 'slip', color: 'rust', layer: 'dress', attributes: { type: 'slip dress', color: 'rust', pattern: 'solid', fabric: 'satin', vibe: 'elegant', length: 'midi' }, query: 'rust satin midi slip dress women', candidates: [
+      { n: '1', brand: 'Juniper & Vale', title: 'Bias Slip Midi Dress Rust', shape: 'slip', color: 'rust', price: 160, fabric: 'Fabric: 100% silk', sizes: ['S', 'M', 'L'], rating: [4.6, 80], visual: 0.95 },
+      { n: '2', brand: 'Coastline Supply', title: 'Satin Slip Dress', shape: 'slip', color: 'rust', price: 65, fabric: 'Fabric: 100% polyester satin', sizes: LETTERS, rating: [3.9, 400], visual: 0.93 },
+      { n: '3', brand: 'Demo Atelier', title: 'Cowl Neck Midi Dress', shape: 'slip', color: 'brown', price: 128, fabric: 'Fabric: viscose', sizes: LETTERS, rating: [4.5, 52], visual: 0.83 },
+      { n: '4', brand: 'Northfield Studio', title: 'Wrap Midi Dress Camel', shape: 'wrap', color: 'camel', price: 148, fabric: 'Fabric: viscose crepe', sizes: LETTERS, rating: [4.4, 130], visual: 0.7 },
+      { n: '5', brand: 'Rue Minuit', title: 'Bodycon Midi Dress', shape: 'column', color: 'rust', price: 110, fabric: 'Fabric: rayon, spandex', sizes: LETTERS, visual: 0.8 },
+    ] },
+  ] },
+  { id: 'look-office', title: 'Office to drinks', file: 'look-03-office.png', pieces: [
+    { id: 'look-office-outer', slot: 'outerwear', shape: 'blazer', color: 'camel', layer: 'outer', attributes: { type: 'blazer', color: 'camel', pattern: 'solid', fabric: 'wool', vibe: 'minimalist' }, query: 'camel blazer women', candidates: [
+      { n: '1', brand: 'Demo Atelier', title: 'Relaxed Wool Blazer Camel', shape: 'blazer', color: 'camel', price: 210, fabric: 'Fabric: 100% wool', sizes: LETTERS, rating: [4.7, 64], visual: 0.94 },
+      { n: '2', brand: 'Marlow Basics', title: 'Soft Blazer Camel', shape: 'blazer', color: 'camel', price: 140, fabric: 'Fabric: cotton blend', sizes: LETTERS, rating: [4.2, 88], visual: 0.9 },
+      { n: '3', brand: 'Coastline Supply', title: 'Oversized Blazer', shape: 'blazer', color: 'camel', price: 75, fabric: 'Fabric: 100% polyester', sizes: LETTERS, rating: [3.8, 210], visual: 0.89 },
+      { n: '4', brand: 'Juniper & Vale', title: 'Wool Wrap Coat', shape: 'coat', color: 'camel', price: 260, fabric: 'Fabric: 90% wool', sizes: ['S', 'M', 'L'], visual: 0.7 },
+    ] },
+    { id: 'look-office-skirt', slot: 'skirt', shape: 'skirt', color: 'green', layer: 'bottom', attributes: { type: 'midi skirt', color: 'green', pattern: 'solid', fabric: 'satin', vibe: 'elegant', length: 'midi' }, query: 'green midi skirt women', candidates: [
+      { n: '1', brand: 'Coastline Supply', title: 'Satin Midi Slip Skirt Green', shape: 'skirt', color: 'green', price: 55, fabric: 'Fabric: 100% polyester satin', sizes: LETTERS, rating: [4.0, 300], visual: 0.94 },
+      { n: '2', brand: 'Demo Atelier', title: 'Pleated Midi Skirt', shape: 'skirt', color: 'green', price: 95, fabric: 'Fabric: recycled polyamide', sizes: LETTERS, rating: [4.6, 70], visual: 0.9 },
+      { n: '3', brand: 'Marlow Basics', title: 'A-Line Midi Skirt', shape: 'skirt', color: 'olive', price: 68, fabric: 'Fabric: cotton twill', sizes: LETTERS, rating: [4.3, 40], visual: 0.83 },
+      { n: '4', brand: 'Juniper & Vale', title: 'Bias Silk Midi Skirt', shape: 'skirt', color: 'green', price: 180, fabric: 'Fabric: 100% silk', sizes: ['S', 'M', 'L'], rating: [4.8, 22], visual: 0.92 },
+    ] },
+  ] },
+];
+
+const swatches: Array<[string, Shape, string]> = [['q-wide-navy', 'wide', 'navy'], ['q-bodycon-red', 'column', 'red'], ['q-slip-rust', 'slip', 'rust'], ['q-leather-black', 'jacket', 'black'], ['q-crop-pink', 'cami', 'pink'], ['q-knit-cream', 'knit', 'cream']];
+
+for (const dir of ['public/demo/looks', 'public/demo/products', 'public/demo/crops', 'public/demo/quiz']) rmSync(dir, { recursive: true, force: true });
+for (const dir of ['public/demo/looks', 'public/demo/products', 'public/demo/crops', 'public/demo/quiz', 'data/demo']) mkdirSync(dir, { recursive: true });
+const fixtures = looks.map(look => {
+  const bytes = png(lookSvg(look.pieces.map(p => ({ shape: p.shape, color: p.color, layer: p.layer }))));
+  writeFileSync(`public/demo/looks/${look.file}`, bytes);
+  return {
+    id: look.id, title: look.title, image: `/demo/looks/${look.file}`, hash: createHash('sha256').update(bytes).digest('hex'),
+    garments: look.pieces.map(p => {
+      writeFileSync(`public/demo/crops/${p.id}.svg`, product(p.shape, p.color));
+      return {
+        id: p.id, slot: p.slot, attributes: p.attributes, query: p.query, crop: `/demo/crops/${p.id}.svg`,
+        candidates: p.candidates.map(c => {
+          const id = `${p.id}-${c.n}`;
+          writeFileSync(`public/demo/products/${id}.svg`, product(c.shape, c.color, c.stripes));
+          return { id, title: c.title, brand: c.brand, url: `https://shop.example.com/${c.brand.toLowerCase().replace(/[^a-z]+/g, '-')}/${id}`, image: `/demo/products/${id}.svg`,
+            price: c.price, currency: 'USD', sizes: c.sizes, fabric: c.fabric, rating: c.rating?.[0] ?? null, reviews: c.rating?.[1] ?? null, sources: ['demo-fixtures'], visual: c.visual };
+        }),
+      };
+    }),
+  };
+});
+for (const [id, shape, color] of swatches) writeFileSync(`public/demo/quiz/${id}.svg`, product(shape, color));
+writeFileSync('data/demo/looks.json', JSON.stringify({ notice: 'Fictional demo looks and products. Brands, prices, links and scores are invented; detection and search are mocked in demo mode.', looks: fixtures }, null, 1) + '\n');
+console.log(`Wrote ${fixtures.length} fictional looks, ${fixtures.flatMap(f => f.garments).length} pieces, ${fixtures.flatMap(f => f.garments.flatMap(g => g.candidates)).length} products.`);

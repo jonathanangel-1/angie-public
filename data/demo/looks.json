@@ -1,0 +1,800 @@
+{
+ "notice": "Fictional demo looks and products. Brands, prices, links and scores are invented; detection and search are mocked in demo mode.",
+ "looks": [
+  {
+   "id": "look-city",
+   "title": "Weekend city look",
+   "image": "/demo/looks/look-01-city.png",
+   "hash": "e0cfb9a219040c16b714f2f5e9c03a2f7efd38a6ad394d09673bbcdc509cac9f",
+   "garments": [
+    {
+     "id": "look-city-outer",
+     "slot": "outerwear",
+     "attributes": {
+      "type": "leather biker jacket",
+      "color": "black",
+      "pattern": "solid",
+      "fabric": "leather",
+      "vibe": "edgy"
+     },
+     "query": "black leather biker jacket women",
+     "crop": "/demo/crops/look-city-outer.svg",
+     "candidates": [
+      {
+       "id": "look-city-outer-1",
+       "title": "Moto Leather Jacket",
+       "brand": "Northfield Studio",
+       "url": "https://shop.example.com/northfield-studio/look-city-outer-1",
+       "image": "/demo/products/look-city-outer-1.svg",
+       "price": 298,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% lamb leather",
+       "rating": 4.7,
+       "reviews": 212,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.93
+      },
+      {
+       "id": "look-city-outer-2",
+       "title": "Faux Leather Biker Jacket",
+       "brand": "Coastline Supply",
+       "url": "https://shop.example.com/coastline-supply/look-city-outer-2",
+       "image": "/demo/products/look-city-outer-2.svg",
+       "price": 89,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% polyester, PU coating",
+       "rating": 3.6,
+       "reviews": 140,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.9
+      },
+      {
+       "id": "look-city-outer-3",
+       "title": "Cropped Leather Jacket",
+       "brand": "Juniper & Vale",
+       "url": "https://shop.example.com/juniper-vale/look-city-outer-3",
+       "image": "/demo/products/look-city-outer-3.svg",
+       "price": 340,
+       "currency": "USD",
+       "sizes": [
+        "S",
+        "M",
+        "L"
+       ],
+       "fabric": "Fabric: 100% leather",
+       "rating": 4.5,
+       "reviews": 60,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.78
+      },
+      {
+       "id": "look-city-outer-4",
+       "title": "Vegan Leather Moto Jacket",
+       "brand": "Rue Minuit",
+       "url": "https://shop.example.com/rue-minuit/look-city-outer-4",
+       "image": "/demo/products/look-city-outer-4.svg",
+       "price": 120,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: polyurethane",
+       "rating": null,
+       "reviews": null,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.88
+      },
+      {
+       "id": "look-city-outer-5",
+       "title": "Boxy Wool Jacket",
+       "brand": "Demo Atelier",
+       "url": "https://shop.example.com/demo-atelier/look-city-outer-5",
+       "image": "/demo/products/look-city-outer-5.svg",
+       "price": 150,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 80% wool",
+       "rating": 4.4,
+       "reviews": 35,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.66
+      },
+      {
+       "id": "look-city-outer-6",
+       "title": "Soft Blazer",
+       "brand": "Marlow Basics",
+       "url": "https://shop.example.com/marlow-basics/look-city-outer-6",
+       "image": "/demo/products/look-city-outer-6.svg",
+       "price": 140,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: cotton blend",
+       "rating": 4.2,
+       "reviews": 88,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.62
+      }
+     ]
+    },
+    {
+     "id": "look-city-top",
+     "slot": "top",
+     "attributes": {
+      "type": "t-shirt",
+      "color": "white",
+      "pattern": "solid",
+      "fabric": "jersey",
+      "vibe": "casual"
+     },
+     "query": "white t-shirt women",
+     "crop": "/demo/crops/look-city-top.svg",
+     "candidates": [
+      {
+       "id": "look-city-top-1",
+       "title": "Everyday Crew Tee",
+       "brand": "Marlow Basics",
+       "url": "https://shop.example.com/marlow-basics/look-city-top-1",
+       "image": "/demo/products/look-city-top-1.svg",
+       "price": 24,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% cotton",
+       "rating": 4.6,
+       "reviews": 900,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.94
+      },
+      {
+       "id": "look-city-top-2",
+       "title": "Heavyweight Cotton Tee",
+       "brand": "Demo Atelier",
+       "url": "https://shop.example.com/demo-atelier/look-city-top-2",
+       "image": "/demo/products/look-city-top-2.svg",
+       "price": 42,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% organic cotton",
+       "rating": 4.8,
+       "reviews": 150,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.92
+      },
+      {
+       "id": "look-city-top-3",
+       "title": "Cropped Baby Tee",
+       "brand": "Coastline Supply",
+       "url": "https://shop.example.com/coastline-supply/look-city-top-3",
+       "image": "/demo/products/look-city-top-3.svg",
+       "price": 18,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: cotton, elastane",
+       "rating": null,
+       "reviews": null,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.88
+      },
+      {
+       "id": "look-city-top-4",
+       "title": "Breton Stripe Tee",
+       "brand": "Juniper & Vale",
+       "url": "https://shop.example.com/juniper-vale/look-city-top-4",
+       "image": "/demo/products/look-city-top-4.svg",
+       "price": 48,
+       "currency": "USD",
+       "sizes": [
+        "S",
+        "M",
+        "L"
+       ],
+       "fabric": "Fabric: 100% cotton",
+       "rating": 4.5,
+       "reviews": 70,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.7
+      },
+      {
+       "id": "look-city-top-5",
+       "title": "Fitted Rib Tee",
+       "brand": "Northfield Studio",
+       "url": "https://shop.example.com/northfield-studio/look-city-top-5",
+       "image": "/demo/products/look-city-top-5.svg",
+       "price": 42,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: modal, elastane",
+       "rating": 4.3,
+       "reviews": 44,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.84
+      }
+     ]
+    },
+    {
+     "id": "look-city-pants",
+     "slot": "pants",
+     "attributes": {
+      "type": "wide-leg trousers",
+      "color": "navy",
+      "pattern": "solid",
+      "fabric": "wool",
+      "vibe": "minimalist"
+     },
+     "query": "navy wide-leg trousers women",
+     "crop": "/demo/crops/look-city-pants.svg",
+     "candidates": [
+      {
+       "id": "look-city-pants-1",
+       "title": "Harbor Wide-Leg Trouser Navy",
+       "brand": "Northfield Studio",
+       "url": "https://shop.example.com/northfield-studio/look-city-pants-1",
+       "image": "/demo/products/look-city-pants-1.svg",
+       "price": 118,
+       "currency": "USD",
+       "sizes": [
+        "2",
+        "4",
+        "6",
+        "8",
+        "10",
+        "12"
+       ],
+       "fabric": "Fabric: 70% wool, 30% polyamide",
+       "rating": 4.6,
+       "reviews": 310,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.95
+      },
+      {
+       "id": "look-city-pants-2",
+       "title": "Pleated Wide-Leg Trouser",
+       "brand": "Juniper & Vale",
+       "url": "https://shop.example.com/juniper-vale/look-city-pants-2",
+       "image": "/demo/products/look-city-pants-2.svg",
+       "price": 135,
+       "currency": "USD",
+       "sizes": [
+        "S",
+        "M",
+        "L"
+       ],
+       "fabric": "Fabric: 100% wool",
+       "rating": 4.7,
+       "reviews": 95,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.93
+      },
+      {
+       "id": "look-city-pants-3",
+       "title": "Linen Wide-Leg Trouser",
+       "brand": "Demo Atelier",
+       "url": "https://shop.example.com/demo-atelier/look-city-pants-3",
+       "image": "/demo/products/look-city-pants-3.svg",
+       "price": 105,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% linen",
+       "rating": 4.4,
+       "reviews": 60,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.72
+      },
+      {
+       "id": "look-city-pants-4",
+       "title": "Low Rise Wide-Leg Pant",
+       "brand": "Coastline Supply",
+       "url": "https://shop.example.com/coastline-supply/look-city-pants-4",
+       "image": "/demo/products/look-city-pants-4.svg",
+       "price": 59,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: polyester",
+       "rating": null,
+       "reviews": null,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.9
+      },
+      {
+       "id": "look-city-pants-5",
+       "title": "Straight Tailored Trouser",
+       "brand": "Demo Atelier",
+       "url": "https://shop.example.com/demo-atelier/look-city-pants-5",
+       "image": "/demo/products/look-city-pants-5.svg",
+       "price": 98,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: wool blend",
+       "rating": 4.5,
+       "reviews": 120,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.8
+      },
+      {
+       "id": "look-city-pants-6",
+       "title": "Wide-Leg Sailor Pant",
+       "brand": "Rue Minuit",
+       "url": "https://shop.example.com/rue-minuit/look-city-pants-6",
+       "image": "/demo/products/look-city-pants-6.svg",
+       "price": 390,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% wool",
+       "rating": null,
+       "reviews": null,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.91
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "look-dinner",
+   "title": "Dinner look",
+   "image": "/demo/looks/look-02-dinner.png",
+   "hash": "733a98e299ea80fabd64691093c32b225d8add5072ed3877f98ef32f1582dfa7",
+   "garments": [
+    {
+     "id": "look-dinner-dress",
+     "slot": "dress",
+     "attributes": {
+      "type": "slip dress",
+      "color": "rust",
+      "pattern": "solid",
+      "fabric": "satin",
+      "vibe": "elegant",
+      "length": "midi"
+     },
+     "query": "rust satin midi slip dress women",
+     "crop": "/demo/crops/look-dinner-dress.svg",
+     "candidates": [
+      {
+       "id": "look-dinner-dress-1",
+       "title": "Bias Slip Midi Dress Rust",
+       "brand": "Juniper & Vale",
+       "url": "https://shop.example.com/juniper-vale/look-dinner-dress-1",
+       "image": "/demo/products/look-dinner-dress-1.svg",
+       "price": 160,
+       "currency": "USD",
+       "sizes": [
+        "S",
+        "M",
+        "L"
+       ],
+       "fabric": "Fabric: 100% silk",
+       "rating": 4.6,
+       "reviews": 80,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.95
+      },
+      {
+       "id": "look-dinner-dress-2",
+       "title": "Satin Slip Dress",
+       "brand": "Coastline Supply",
+       "url": "https://shop.example.com/coastline-supply/look-dinner-dress-2",
+       "image": "/demo/products/look-dinner-dress-2.svg",
+       "price": 65,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% polyester satin",
+       "rating": 3.9,
+       "reviews": 400,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.93
+      },
+      {
+       "id": "look-dinner-dress-3",
+       "title": "Cowl Neck Midi Dress",
+       "brand": "Demo Atelier",
+       "url": "https://shop.example.com/demo-atelier/look-dinner-dress-3",
+       "image": "/demo/products/look-dinner-dress-3.svg",
+       "price": 128,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: viscose",
+       "rating": 4.5,
+       "reviews": 52,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.83
+      },
+      {
+       "id": "look-dinner-dress-4",
+       "title": "Wrap Midi Dress Camel",
+       "brand": "Northfield Studio",
+       "url": "https://shop.example.com/northfield-studio/look-dinner-dress-4",
+       "image": "/demo/products/look-dinner-dress-4.svg",
+       "price": 148,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: viscose crepe",
+       "rating": 4.4,
+       "reviews": 130,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.7
+      },
+      {
+       "id": "look-dinner-dress-5",
+       "title": "Bodycon Midi Dress",
+       "brand": "Rue Minuit",
+       "url": "https://shop.example.com/rue-minuit/look-dinner-dress-5",
+       "image": "/demo/products/look-dinner-dress-5.svg",
+       "price": 110,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: rayon, spandex",
+       "rating": null,
+       "reviews": null,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.8
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "look-office",
+   "title": "Office to drinks",
+   "image": "/demo/looks/look-03-office.png",
+   "hash": "cac3605c4b9e26e0b04d2fbf9c7d9087437fe7ee993143ac1a8990e581ca8399",
+   "garments": [
+    {
+     "id": "look-office-outer",
+     "slot": "outerwear",
+     "attributes": {
+      "type": "blazer",
+      "color": "camel",
+      "pattern": "solid",
+      "fabric": "wool",
+      "vibe": "minimalist"
+     },
+     "query": "camel blazer women",
+     "crop": "/demo/crops/look-office-outer.svg",
+     "candidates": [
+      {
+       "id": "look-office-outer-1",
+       "title": "Relaxed Wool Blazer Camel",
+       "brand": "Demo Atelier",
+       "url": "https://shop.example.com/demo-atelier/look-office-outer-1",
+       "image": "/demo/products/look-office-outer-1.svg",
+       "price": 210,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% wool",
+       "rating": 4.7,
+       "reviews": 64,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.94
+      },
+      {
+       "id": "look-office-outer-2",
+       "title": "Soft Blazer Camel",
+       "brand": "Marlow Basics",
+       "url": "https://shop.example.com/marlow-basics/look-office-outer-2",
+       "image": "/demo/products/look-office-outer-2.svg",
+       "price": 140,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: cotton blend",
+       "rating": 4.2,
+       "reviews": 88,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.9
+      },
+      {
+       "id": "look-office-outer-3",
+       "title": "Oversized Blazer",
+       "brand": "Coastline Supply",
+       "url": "https://shop.example.com/coastline-supply/look-office-outer-3",
+       "image": "/demo/products/look-office-outer-3.svg",
+       "price": 75,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% polyester",
+       "rating": 3.8,
+       "reviews": 210,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.89
+      },
+      {
+       "id": "look-office-outer-4",
+       "title": "Wool Wrap Coat",
+       "brand": "Juniper & Vale",
+       "url": "https://shop.example.com/juniper-vale/look-office-outer-4",
+       "image": "/demo/products/look-office-outer-4.svg",
+       "price": 260,
+       "currency": "USD",
+       "sizes": [
+        "S",
+        "M",
+        "L"
+       ],
+       "fabric": "Fabric: 90% wool",
+       "rating": null,
+       "reviews": null,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.7
+      }
+     ]
+    },
+    {
+     "id": "look-office-skirt",
+     "slot": "skirt",
+     "attributes": {
+      "type": "midi skirt",
+      "color": "green",
+      "pattern": "solid",
+      "fabric": "satin",
+      "vibe": "elegant",
+      "length": "midi"
+     },
+     "query": "green midi skirt women",
+     "crop": "/demo/crops/look-office-skirt.svg",
+     "candidates": [
+      {
+       "id": "look-office-skirt-1",
+       "title": "Satin Midi Slip Skirt Green",
+       "brand": "Coastline Supply",
+       "url": "https://shop.example.com/coastline-supply/look-office-skirt-1",
+       "image": "/demo/products/look-office-skirt-1.svg",
+       "price": 55,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: 100% polyester satin",
+       "rating": 4,
+       "reviews": 300,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.94
+      },
+      {
+       "id": "look-office-skirt-2",
+       "title": "Pleated Midi Skirt",
+       "brand": "Demo Atelier",
+       "url": "https://shop.example.com/demo-atelier/look-office-skirt-2",
+       "image": "/demo/products/look-office-skirt-2.svg",
+       "price": 95,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: recycled polyamide",
+       "rating": 4.6,
+       "reviews": 70,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.9
+      },
+      {
+       "id": "look-office-skirt-3",
+       "title": "A-Line Midi Skirt",
+       "brand": "Marlow Basics",
+       "url": "https://shop.example.com/marlow-basics/look-office-skirt-3",
+       "image": "/demo/products/look-office-skirt-3.svg",
+       "price": 68,
+       "currency": "USD",
+       "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+       ],
+       "fabric": "Fabric: cotton twill",
+       "rating": 4.3,
+       "reviews": 40,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.83
+      },
+      {
+       "id": "look-office-skirt-4",
+       "title": "Bias Silk Midi Skirt",
+       "brand": "Juniper & Vale",
+       "url": "https://shop.example.com/juniper-vale/look-office-skirt-4",
+       "image": "/demo/products/look-office-skirt-4.svg",
+       "price": 180,
+       "currency": "USD",
+       "sizes": [
+        "S",
+        "M",
+        "L"
+       ],
+       "fabric": "Fabric: 100% silk",
+       "rating": 4.8,
+       "reviews": 22,
+       "sources": [
+        "demo-fixtures"
+       ],
+       "visual": 0.92
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
