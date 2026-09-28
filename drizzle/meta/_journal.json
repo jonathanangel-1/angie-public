@@ -43,6 +43,13 @@
       "when": 1788168905733,
       "tag": "0005_isolate_feedback_history",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1790609530274,
+      "tag": "0007_v2_fit_first",
+      "breakpoints": true
     }
   ]
 }
