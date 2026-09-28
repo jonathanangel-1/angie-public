@@ -84,3 +84,11 @@ test('never-wear matching is word-based', () => {
   assert.equal(violatesNever({ title: 'Cropped cardigan', fabric: '' }, ['crop tops']), 'crop tops');
   assert.equal(violatesNever({ title: 'Minimalist midi dress', fabric: '' }, ['mini length']), null);
 });
+
+test('size: history from a different or unknown garment type is ignored', () => {
+  const shirt = purchase({ brand: 'Juniper & Vale', title: 'Poplin Button-Down', slot: 'top', size: 'S' });
+  const unknown = purchase({ brand: 'Juniper & Vale', title: 'Mystery item', slot: null, size: 'XS' });
+  const s = suggestSize({ brand: 'Juniper & Vale', title: 'Pleated trouser', sizes: ['S', 'M', 'L'] }, 'pants', state().quiz, [shirt, unknown]);
+  assert.equal(s.size, 'M');
+  assert.match(s.note, /usual bottom size/);
+});

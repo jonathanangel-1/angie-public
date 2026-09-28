@@ -47,12 +47,13 @@ export function nearestListed(size: string, listed: string[]): { label: string; 
 
 const quizKey = (slot: Slot, title: string): keyof Quiz['sizes'] =>
   slot === 'dress' ? 'dress' : slot === 'top' || slot === 'outerwear' ? 'top' : /jean|denim/i.test(title) ? 'jeans' : 'bottom';
-const group = (slot: Slot | null) => (slot === 'top' || slot === 'outerwear' ? 'upper' : slot === 'dress' ? 'dress' : 'lower');
+const group = (slot: Slot | null) => (slot === null ? null : slot === 'top' || slot === 'outerwear' ? 'upper' : slot === 'dress' ? 'dress' : 'lower');
 
 // A size from what she has actually kept or returned at this brand, else her
 // stated size. No brand size chart is needed.
 export function suggestSize(item: { brand: string; title: string; sizes: string[] }, slot: Slot, quiz: Quiz, purchases: Purchase[]): SizeSuggestion {
-  const history = purchases.filter(p => p.brand.toLowerCase() === item.brand.toLowerCase() && group(p.slot) === group(slot) && p.size)
+  // A record whose garment type is unknown says nothing about this item's size.
+  const history = purchases.filter(p => p.slot !== null && p.brand.toLowerCase() === item.brand.toLowerCase() && group(p.slot) === group(slot) && p.size)
     .sort((a, b) => a.createdAt - b.createdAt);
   const kept = history.filter(p => p.status === 'kept').at(-1);
   const lastFit = history.filter(p => p.status === 'returned' && ['too-small', 'too-large'].includes(p.returnReason || '')).at(-1);
@@ -66,7 +67,7 @@ export function suggestSize(item: { brand: string; title: string; sizes: string[
     why = `You kept ${kept.size} at ${item.brand}${kept.source === 'email' ? ' (from your order emails)' : ''}.`;
   } else {
     const stated = quiz.sizes[quizKey(slot, item.title)];
-    if (stated) { base = stated; why = `Your usual ${quizKey(slot, item.title)} size; no history with ${item.brand} yet.`; }
+    if (stated) { base = stated; why = `Your usual ${quizKey(slot, item.title)} size; nothing kept or returned at ${item.brand} in this category yet.`; }
   }
   if (!base) return { size: null, confidence: 'low', note: 'Add your usual sizes in My taste to get a suggestion.' };
   if (!item.sizes.length) return { size: normalizeSize(base), confidence: confidence === 'high' ? 'medium' : 'low', note: `${why} Sizes weren't listed; check the product page.` };

@@ -64,7 +64,7 @@ export function returnRisk(item: Candidate, fs: string[], purchases: Purchase[],
   const badFabric = fs.find(f => qualityFabrics.has(f));
   if (badFabric) { risk += 0.15; reasons.push(`you returned ${badFabric.slice(7)} for quality`); }
   if (size.size === null) { risk += 0.12; reasons.push('size unclear'); }
-  else if (size.confidence === 'low') { risk += 0.06; reasons.push('first order at this brand'); }
+  else if (size.confidence === 'low') { risk += 0.06; reasons.push('size not yet proven here'); }
   else if (size.confidence === 'high') risk -= 0.06;
   if (item.rating !== null && (item.reviews ?? 0) >= 20) {
     if (item.rating < 4) { risk += 0.1; reasons.push(`rated ${item.rating.toFixed(1)}`); }

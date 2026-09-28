@@ -40,6 +40,7 @@ test('noise is flagged, not trusted: presumed keeps and orphan returns need revi
   assert.equal(slip.status, 'returned');
   assert.equal(slip.returnReason, 'quality');
   assert.ok(slip.needsReview);
+  assert.equal(candidates.find(c => c.title === 'Poplin Button-Down')!.slot, 'top');
   const dress = candidates.find(c => c.title === 'Wrap Midi Dress Camel')!;
   assert.equal(dress.status, 'kept');
 });

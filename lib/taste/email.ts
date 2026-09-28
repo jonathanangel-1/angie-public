@@ -86,7 +86,7 @@ export function parseEmail(raw: string): ParsedEmail {
 export function slotFromTitle(title: string): Slot | null {
   const t = title.toLowerCase();
   return /dress|gown/.test(t) ? 'dress' : /jacket|blazer|coat|trench/.test(t) ? 'outerwear' : /skirt/.test(t) ? 'skirt'
-    : /trouser|pant|jean|legging|short/.test(t) ? 'pants' : /tee|top|shirt|blouse|cami|sweater|knit|cardigan|tank/.test(t) ? 'top' : null;
+    : /trouser|pant|jean|legging|short/.test(t) ? 'pants' : /tee|top|shirt|blouse|cami|sweater|knit|cardigan|tank|button[- ]down|bodysuit|polo/.test(t) ? 'top' : null;
 }
 
 const same = (a: string, b: string) => a.toLowerCase().replace(/[^a-z0-9]/g, '').includes(b.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 14));
